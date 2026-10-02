@@ -53,16 +53,16 @@
         <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio & Chân Trang</button>
     </div>
 
-    <!-- PHẦN 2: MẠNG XÃ HỘI LIÊN KẾT -->
+    <!-- PHẦN 2: 4 MẠNG XÃ HỘI CHUẨN MÀU -->
     <div class="section-box">
-        <h3>🌐 Cấu hình Mạng Xã Hội (Link liên kết)</h3>
+        <h3>🌐 Cấu hình Mạng Xã Hội (Facebook, TikTok, Instagram, YouTube)</h3>
         <div class="row">
-            <div class="form-group"><label>Instagram URL:</label><input type="text" id="socIg" placeholder="https://instagram.com/..."></div>
-            <div class="form-group"><label>TikTok URL:</label><input type="text" id="socTt" placeholder="https://tiktok.com/@..."></div>
+            <div class="form-group"><label style="color:#1877F2;">📘 Facebook URL:</label><input type="text" id="socFb" placeholder="https://facebook.com/..."></div>
+            <div class="form-group"><label style="color:#00f2fe;">🎵 TikTok URL:</label><input type="text" id="socTt" placeholder="https://tiktok.com/@..."></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>YouTube URL:</label><input type="text" id="socYt" placeholder="https://youtube.com/..."></div>
-            <div class="form-group"><label>WhatsApp / Telegram URL:</label><input type="text" id="socWa" placeholder="https://wa.me/..."></div>
+            <div class="form-group"><label style="color:#e84393;">📸 Instagram URL:</label><input type="text" id="socIg" placeholder="https://instagram.com/..."></div>
+            <div class="form-group"><label style="color:#ff0000;">▶️ YouTube URL:</label><input type="text" id="socYt" placeholder="https://youtube.com/..."></div>
         </div>
         <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
     </div>
@@ -129,7 +129,7 @@
             let data = await res.json();
             cloudData = data.record.products ? data.record : { 
                 profile: { name: "Achadinhos do Brasil 🇧🇷", avatar: "", secure: "🔒 100% Seguro • Verificado", copyright: "© 2026 Achadinhos do Brasil. All Rights Reserved." },
-                socials: { ig: "", tt: "", yt: "", wa: "" },
+                socials: { fb: "", tt: "", ig: "", yt: "" },
                 products: [] 
             };
 
@@ -139,10 +139,10 @@
             document.getElementById('copyrightTxt').value = cloudData.profile.copyright || "";
 
             if(cloudData.socials) {
-                document.getElementById('socIg').value = cloudData.socials.ig || "";
+                document.getElementById('socFb').value = cloudData.socials.fb || "";
                 document.getElementById('socTt').value = cloudData.socials.tt || "";
+                document.getElementById('socIg').value = cloudData.socials.ig || "";
                 document.getElementById('socYt').value = cloudData.socials.yt || "";
-                document.getElementById('socWa').value = cloudData.socials.wa || "";
             }
 
             renderAdminList();
@@ -192,10 +192,10 @@
 
     async function updateSocials() {
         cloudData.socials = {
-            ig: document.getElementById('socIg').value,
+            fb: document.getElementById('socFb').value,
             tt: document.getElementById('socTt').value,
-            yt: document.getElementById('socYt').value,
-            wa: document.getElementById('socWa').value
+            ig: document.getElementById('socIg').value,
+            yt: document.getElementById('socYt').value
         };
         await saveToCloud("Đã lưu mạng xã hội thành công!");
     }
