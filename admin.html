@@ -1,55 +1,75 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - Master Admin</title>
+    <title>Master Admin - Quản Trị Hệ Thống Bio</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .admin-box { width: 100%; max-width: 650px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
-        .section-box { background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; }
-        .section-box h3 { font-size: 16px; margin-bottom: 10px; color: #444; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px; color: #555; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 15px; margin-top: 5px; }
+        body { background: #0c0d14; color: #fff; padding: 20px; display: flex; justify-content: center; }
+        .admin-box { width: 100%; max-width: 700px; background: #161822; padding: 25px; border-radius: 14px; border: 1px solid #2a2d3d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 22px; margin-bottom: 20px; color: #ff4757; text-align: center; }
+        .section-box { background: #1e2130; padding: 18px; border-radius: 10px; border: 1px solid #2f3348; margin-bottom: 20px; }
+        .section-box h3 { font-size: 15px; margin-bottom: 12px; color: #a4b0be; border-bottom: 1px solid #2f3348; padding-bottom: 6px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 4px; color: #ced6e0; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #3f445d; background: #0c0d14; color: #fff; border-radius: 6px; font-size: 13px; }
+        input:focus, select:focus { border-color: #ff4757; outline: none; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 14px; margin-top: 5px; transition: 0.2s; }
         .btn:hover { background: #ff3838; }
-        .btn-profile { background: #2ed573; }
+        .btn-profile { background: #2ed573; color: #000; }
         .btn-profile:hover { background: #26af5f; }
-        .loading { text-align: center; color: #005bed; font-weight: bold; margin-top: 10px; display: none; }
+        .loading { text-align: center; color: #70a1ff; font-weight: bold; margin-top: 10px; display: none; }
         
-        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border: 1px solid #e1e1e1; }
-        .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #12141d; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border: 1px solid #262938; }
+        .btn-del { background: #e53935; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="admin-box">
-    <h1>🛠️ Bảng Quản Trị Hệ Thống Bio</h1>
+    <h1>🛠️ BẢNG QUẢN TRỊ MASTER BIO</h1>
     
-    <!-- PHẦN 1: CẬP NHẬT THÔNG TIN CHỦ SHOP -->
+    <!-- PHẦN 1: THÔNG TIN BIO & GIAO DIỆN CHÍNH -->
     <div class="section-box">
-        <h3>👤 Cập nhật thông tin trang Bio (Avatar, Tên...)</h3>
+        <h3>👤 Chỉnh sửa Thông tin Bio & Chân trang</h3>
         <div class="form-group">
-            <label>Tên chủ Shop / Kênh:</label>
-            <input type="text" id="ownerName" placeholder="Ví dụ: Achadinhos do Brasil 🇧🇷">
+            <label>Tên Shop / Kênh:</label>
+            <input type="text" id="ownerName" placeholder="Achadinhos do Brasil 🇧🇷">
         </div>
         <div class="form-group">
             <label>Link ảnh đại diện (Avatar URL):</label>
-            <input type="text" id="ownerAvatar" placeholder="https://images.unsplash.com/...">
+            <input type="text" id="ownerAvatar" placeholder="https://...">
         </div>
         <div class="form-group">
-            <label>Dòng thông báo bảo mật/uy tín:</label>
-            <input type="text" id="ownerSecure" placeholder="Ví dụ: 🔒 100% Seguro • Verificado">
+            <label>Thông báo uy tín (Dưới tên):</label>
+            <input type="text" id="ownerSecure" placeholder="🔒 100% Seguro • Verificado">
         </div>
-        <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Thay Đổi Thông Tin Bio</button>
+        <div class="form-group">
+            <label>Thông tin Copyright (Dưới đáy trang):</label>
+            <input type="text" id="copyrightTxt" placeholder="© 2026 Achadinhos do Brasil. All Rights Reserved.">
+        </div>
+        <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio & Chân Trang</button>
     </div>
 
-    <!-- PHẦN 2: THÊM SẢN PHẨM -->
+    <!-- PHẦN 2: MẠNG XÃ HỘI LIÊN KẾT -->
     <div class="section-box">
-        <h3>📦 Thêm Sản Phẩm Mới</h3>
+        <h3>🌐 Cấu hình Mạng Xã Hội (Link liên kết)</h3>
+        <div class="row">
+            <div class="form-group"><label>Instagram URL:</label><input type="text" id="socIg" placeholder="https://instagram.com/..."></div>
+            <div class="form-group"><label>TikTok URL:</label><input type="text" id="socTt" placeholder="https://tiktok.com/@..."></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>YouTube URL:</label><input type="text" id="socYt" placeholder="https://youtube.com/..."></div>
+            <div class="form-group"><label>WhatsApp / Telegram URL:</label><input type="text" id="socWa" placeholder="https://wa.me/..."></div>
+        </div>
+        <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
+    </div>
+
+    <!-- PHẦN 3: THÊM SẢN PHẨM & TỰ ĐỘNG TÍNH % GIẢM GIÁ -->
+    <div class="section-box">
+        <h3>📦 Thêm Sản Phẩm (Tự động tính % giảm giá)</h3>
         <div class="form-group">
             <label>Danh mục sản phẩm:</label>
             <select id="pCategory">
@@ -62,47 +82,44 @@
             <label>Tên sản phẩm:</label>
             <input type="text" id="pTitle" placeholder="Ví dụ: Copo Térmico Inox 1.2L">
         </div>
-        <div class="form-group">
-            <label>Link hình ảnh sản phẩm (URL ảnh):</label>
-            <input type="text" id="pImage" placeholder="https://images.unsplash.com/...">
+        <div class="row">
+            <div class="form-group"><label>Giá hiện tại (Main Price):</label><input type="text" id="pMainPrice" placeholder="R$ 39,90" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá gốc (Sub Price):</label><input type="text" id="pSubPrice" placeholder="R$ 120,00" oninput="autoCalculateBadge()"></div>
         </div>
         <div class="form-group">
-            <label>Link mua hàng (Affiliate Link):</label>
-            <input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/e/...">
+            <label>Nhãn giảm giá (Tự động tính hoặc sửa tay):</label>
+            <input type="text" id="pBadge" placeholder="VD: 67% OFF">
         </div>
         <div class="form-group">
-            <label>Giá hiện tại (Main Price):</label>
-            <input type="text" id="pMainPrice" placeholder="R$ 39,90">
+            <label>Link hình ảnh sản phẩm (URL):</label><input type="text" id="pImage" placeholder="https://...">
         </div>
         <div class="form-group">
-            <label>Giá gốc & Nhãn giảm giá:</label>
-            <input type="text" id="pSubPrice" placeholder="R$ 120,00" style="margin-bottom:5px;">
-            <input type="text" id="pBadge" placeholder="Nhãn (VD: 70% OFF)">
+            <label>Link mua hàng (Affiliate Link):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/...">
         </div>
         <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Lên Mây</button>
     </div>
 
-    <div id="loadingText" class="loading">Đang đồng bộ dữ liệu với mây, vui lòng đợi...</div>
+    <div id="loadingText" class="loading">Đang đồng bộ dữ liệu với mây...</div>
 
-    <div style="margin-top: 20px;">
-        <h3>📋 Danh sách sản phẩm hiện tại trên mây:</h3>
-        <div id="currentProductsList" style="margin-top: 10px;">Đang tải dữ liệu...</div>
+    <div style="margin-top: 15px;">
+        <h3>📋 Danh sách sản phẩm hiện tại:</h3>
+        <div id="currentProductsList" style="margin-top: 10px;">Đang tải...</div>
     </div>
 </div>
 
 <script>
-    const ADMIN_PASS = "1"; // Mật khẩu quản trị
+    const ADMIN_PASS = "123456";
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
 
-    let enteredPass = prompt("Nhập mật khẩu quản trị (Mặc định: 1):");
+    let enteredPass = prompt("Nhập mật khẩu quản trị (Mặc định: 123456):");
     if (enteredPass !== ADMIN_PASS) {
         alert("Sai mật khẩu!");
         document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px; color:red;'>Truy cập bị từ chối ❌</h2>";
         throw new Error("Unauthorized");
     }
 
-    let cloudData = { profile: {}, products: [] };
+    let cloudData = { profile: {}, socials: {}, products: [] };
 
     async function loadAdminData() {
         try {
@@ -110,21 +127,41 @@
                 headers: { 'X-Master-Key': MASTER_KEY }
             });
             let data = await res.json();
-            
-            // Nếu bin trống hoặc chưa có cấu trúc chuẩn, tự động gán mặc định
             cloudData = data.record.products ? data.record : { 
-                profile: { name: "Achadinhos do Brasil 🇧🇷", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80", secure: "🔒 100% Seguro • Verificado" },
+                profile: { name: "Achadinhos do Brasil 🇧🇷", avatar: "", secure: "🔒 100% Seguro • Verificado", copyright: "© 2026 Achadinhos do Brasil. All Rights Reserved." },
+                socials: { ig: "", tt: "", yt: "", wa: "" },
                 products: [] 
             };
 
-            // Đưa dữ liệu profile lên form
             document.getElementById('ownerName').value = cloudData.profile.name || "";
             document.getElementById('ownerAvatar').value = cloudData.profile.avatar || "";
             document.getElementById('ownerSecure').value = cloudData.profile.secure || "";
+            document.getElementById('copyrightTxt').value = cloudData.profile.copyright || "";
+
+            if(cloudData.socials) {
+                document.getElementById('socIg').value = cloudData.socials.ig || "";
+                document.getElementById('socTt').value = cloudData.socials.tt || "";
+                document.getElementById('socYt').value = cloudData.socials.yt || "";
+                document.getElementById('socWa').value = cloudData.socials.wa || "";
+            }
 
             renderAdminList();
         } catch (err) {
-            document.getElementById('currentProductsList').innerHTML = "Lỗi kết nối tới kho mây JSONBin.";
+            document.getElementById('currentProductsList').innerHTML = "Lỗi kết nối kho mây.";
+        }
+    }
+
+    // Tự động tính % giảm giá từ giá hiện tại và giá gốc
+    function autoCalculateBadge() {
+        let mainStr = document.getElementById('pMainPrice').value;
+        let subStr = document.getElementById('pSubPrice').value;
+        
+        let mainNum = parseFloat(mainStr.replace(/[^\d,.]/g, '').replace(',', '.'));
+        let subNum = parseFloat(subStr.replace(/[^\d,.]/g, '').replace(',', '.'));
+
+        if(mainNum && subNum && subNum > mainNum) {
+            let discount = Math.round(((subNum - mainNum) / subNum) * 100);
+            document.getElementById('pBadge').value = `${discount}% OFF`;
         }
     }
 
@@ -132,13 +169,13 @@
         const listDiv = document.getElementById('currentProductsList');
         listDiv.innerHTML = '';
         if (!cloudData.products || cloudData.products.length === 0) {
-            listDiv.innerHTML = "<p style='color:#666;'>Chưa có sản phẩm nào trên mây.</p>";
+            listDiv.innerHTML = "<p style='color:#888;'>Chưa có sản phẩm nào.</p>";
             return;
         }
         cloudData.products.forEach((p, index) => {
             listDiv.innerHTML += `
                 <div class="admin-item">
-                    <span><b>[${p.category.toUpperCase()}]</b> ${p.title} (${p.mainPrice})</span>
+                    <span><b>[${p.category}]</b> ${p.title} (${p.mainPrice})</span>
                     <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
                 </div>
             `;
@@ -146,12 +183,22 @@
     }
 
     async function updateProfile() {
-        cloudData.profile = {
-            name: document.getElementById('ownerName').value,
-            avatar: document.getElementById('ownerAvatar').value,
-            secure: document.getElementById('ownerSecure').value
+        if(!cloudData.profile) cloudData.profile = {};
+        cloudData.profile.name = document.getElementById('ownerName').value;
+        cloudData.profile.avatar = document.getElementById('ownerAvatar').value;
+        cloudData.profile.secure = document.getElementById('ownerSecure').value;
+        cloudData.profile.copyright = document.getElementById('copyrightTxt').value;
+        await saveToCloud("Đã lưu thông tin Bio & Chân trang thành công!");
+    }
+
+    async function updateSocials() {
+        cloudData.socials = {
+            ig: document.getElementById('socIg').value,
+            tt: document.getElementById('socTt').value,
+            yt: document.getElementById('socYt').value,
+            wa: document.getElementById('socWa').value
         };
-        await saveToCloud("Đã cập nhật thông tin Bio thành công!");
+        await saveToCloud("Đã lưu liên kết mạng xã hội thành công!");
     }
 
     async function addNewProduct() {
@@ -163,7 +210,7 @@
             link: document.getElementById('pLink').value,
             mainPrice: document.getElementById('pMainPrice').value,
             subPrice: document.getElementById('pSubPrice').value,
-            badge: document.getElementById('pBadge').value || "SALE",
+            badge: document.getElementById('pBadge').value || "HOT",
             rating: "4.9",
             sold: "2k+"
         };
@@ -177,7 +224,6 @@
         cloudData.products.push(newItem);
         await saveToCloud("Thêm sản phẩm thành công!");
         
-        // Reset form sản phẩm
         document.getElementById('pTitle').value = '';
         document.getElementById('pImage').value = '';
         document.getElementById('pLink').value = '';
