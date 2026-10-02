@@ -8,7 +8,13 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #0c0d14; color: #fff; padding: 20px; display: flex; justify-content: center; }
-        .admin-box { width: 100%; max-width: 700px; background: #161822; padding: 25px; border-radius: 14px; border: 1px solid #2a2d3d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* KHUNG ĐĂNG NHẬP BẢO MẬT */
+        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0c0d14; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: #161822; padding: 30px; border-radius: 12px; border: 1px solid #2a2d3d; width: 100%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; }
+        .login-box h2 { color: #ff4757; margin-bottom: 20px; font-size: 20px; }
+
+        .admin-box { width: 100%; max-width: 700px; background: #161822; padding: 25px; border-radius: 14px; border: 1px solid #2a2d3d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
         h1 { font-size: 22px; margin-bottom: 20px; color: #ff4757; text-align: center; }
         .section-box { background: #1e2130; padding: 18px; border-radius: 10px; border: 1px solid #2f3348; margin-bottom: 20px; }
         .section-box h3 { font-size: 15px; margin-bottom: 12px; color: #a4b0be; border-bottom: 1px solid #2f3348; padding-bottom: 6px; }
@@ -42,7 +48,18 @@
 </head>
 <body>
 
-<div class="admin-box">
+<!-- KHUNG ĐĂNG NHẬP BẢO MẬT ADMIN -->
+<div id="loginOverlay">
+    <div class="login-box">
+        <h2>🔐 ĐĂNG NHẬP ADMIN</h2>
+        <div class="form-group"><label>Tài khoản:</label><input type="text" id="authUser" placeholder="Nhập tài khoản"></div>
+        <div class="form-group"><label>Mật khẩu:</label><input type="password" id="authPass" placeholder="Nhập mật khẩu"></div>
+        <button class="btn" onclick="checkLogin()">Đăng Nhập Quản Trị</button>
+        <p id="loginError" style="color:#ff4757; font-size:12px; margin-top:10px; display:none;">Sai tài khoản hoặc mật khẩu!</p>
+    </div>
+</div>
+
+<div class="admin-box" id="adminMainContent">
     <h1>🛠️ BẢNG QUẢN TRỊ MASTER BIO</h1>
     
     <div class="section-box">
@@ -68,7 +85,7 @@
                 <label style="color:#00f2fe;">🎵 TikTok:</label>
                 <div class="input-with-toggle">
                     <input type="text" id="socTt" placeholder="Link TikTok">
-                    <select id="showTt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                    <select id="showTt"><option value="true">👁️️ Hiện</option><option value="false">🚫 Ẩn</option></select>
                 </div>
             </div>
         </div>
@@ -132,6 +149,23 @@
 <script>
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
+
+    // TÀI KHOẢN VÀ MẬT KHẨU QUẢN TRỊ (BẠN CÓ THỂ ĐỔI Ở ĐÂY)
+    const ADMIN_USER = "ducpm";
+    const ADMIN_PASS = "admin123";
+
+    function checkLogin() {
+        let u = document.getElementById('authUser').value.trim();
+        let p = document.getElementById('authPass').value.trim();
+        if(u === ADMIN_USER && p === ADMIN_PASS) {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('adminMainContent').style.display = 'block';
+            loadAdminData();
+        } else {
+            let err = document.getElementById('loginError');
+            err.style.display = 'block';
+        }
+    }
 
     let cloudData = { profile: {}, socials: {}, categories: [], products: [] };
     let editIndex = -1;
@@ -418,8 +452,6 @@
             renderAdminList();
         } catch (err) { alert("Lỗi mạng."); } finally { document.getElementById('loadingText').style.display = 'none'; }
     }
-
-    loadAdminData();
 </script>
 </body>
 </html>
