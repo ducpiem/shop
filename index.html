@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,15 +70,19 @@
 <div class="container">
     <div class="top-bar">
         <span></span>
+        <!-- Hỗ trợ 5 Ngôn Ngữ -->
         <select class="lang-select" id="langSelect" onchange="changeLanguage()">
+            <option value="vi">🇻🇳 Tiếng Việt</option>
             <option value="pt" selected>🇧🇷 Português</option>
             <option value="en">🇺🇸 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
         </select>
     </div>
 
     <div class="header">
-        <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Profile">
-        <div class="owner-name">Achadinhos do Brasil 🇧🇷</div>
+        <img class="avatar" id="ownerAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Profile">
+        <div class="owner-name" id="ownerNameTxt">Achadinhos do Brasil 🇧🇷</div>
         <div class="secure-text" id="txtSecure">🔒 100% Seguro • Verificado</div>
     </div>
 
@@ -96,13 +100,22 @@
 
 <script>
     const BIN_ID = "6abf812cffd5d16053458888";
-    let globalProducts = [];
+    let globalData = { profile: {}, products: [] };
     let activeCategory = 'all';
 
-    // Từ điển ngôn ngữ
+    // Từ điển đầy đủ 5 ngôn ngữ
     const translations = {
+        vi: {
+            all: "🔥 Tất cả",
+            hot: "⚡ Hot Sale",
+            util: "💧 Tiện ích",
+            tech: "⌚ Điện tử",
+            shipping: "⚡ Miễn phí vận chuyển",
+            buy: "MUA NGAY 🛒",
+            loading: "Đang tải ưu đãi từ mây... 🔄",
+            empty: "Không tìm thấy sản phẩm nào."
+        },
         pt: {
-            secure: "🔒 100% Seguro • Verificado",
             all: "🔥 Todos",
             hot: "⚡ Hot Sale",
             util: "💧 Utilidades",
@@ -113,15 +126,34 @@
             empty: "Nenhum produto encontrado."
         },
         en: {
-            secure: "🔒 100% Secure • Verified",
             all: "🔥 All Items",
             hot: "⚡ Hot Sale",
-            util: "💧 Utilities",
+            util: "Utilities",
             tech: "⌚ Electronics",
             shipping: "⚡ Free Shipping",
             buy: "BUY NOW 🛒",
             loading: "Loading offers from cloud... 🔄",
             empty: "No products found."
+        },
+        fr: {
+            all: "🔥 Tous",
+            hot: "⚡ Vente Flash",
+            util: "💧 Utilitaires",
+            tech: "⌚ Électronique",
+            shipping: "⚡ Livraison Gratuite",
+            buy: "ACHETER 🛒",
+            loading: "Chargement depuis le cloud... 🔄",
+            empty: "Aucun produit trouvé."
+        },
+        es: {
+            all: "🔥 Todos",
+            hot: "⚡ Súper Ofertas",
+            util: "💧 Utilidades",
+            tech: "⌚ Electrónica",
+            shipping: "⚡ Envío Gratis",
+            buy: "COMPRAR AHORA 🛒",
+            loading: "Cargando ofertas de la nube... 🔄",
+            empty: "No se encontraron productos."
         }
     };
 
@@ -129,12 +161,19 @@
         renderGrid();
     }
 
-    async function fetchProductsFromCloud() {
+    async function fetchDataFromCloud() {
         try {
-            // Thêm chuỗi thời gian ngẫu nhiên để tránh trình duyệt lưu cache cũ (nguyên nhân không hiện sản phẩm mới)
             let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`);
             let data = await res.json();
-            globalProducts = data.record.products || [];
+            globalData = data.record.products ? data.record : { profile: {}, products: data.record.products || [] };
+            
+            // Cập nhật thông tin profile nếu có trên mây
+            if(globalData.profile) {
+                if(globalData.profile.name) document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
+                if(globalData.profile.avatar) document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
+                if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
+            }
+
             renderGrid();
         } catch (err) {
             document.getElementById('productGrid').innerHTML = `<div class="loading-msg" style="color:red;">Erro ao carregar dados da nuvem.</div>`;
@@ -152,8 +191,7 @@
         const lang = document.getElementById('langSelect').value;
         const t = translations[lang];
 
-        // Cập nhật text giao diện theo ngôn ngữ
-        document.getElementById('txtSecure').innerText = t.secure;
+        // Cập nhật text danh mục theo ngôn ngữ
         document.getElementById('tabAll').innerText = t.all;
         document.getElementById('tabHot').innerText = t.hot;
         document.getElementById('tabUtil').innerText = t.util;
@@ -162,7 +200,8 @@
         const gridContainer = document.getElementById('productGrid');
         gridContainer.innerHTML = '';
 
-        const filtered = activeCategory === 'all' ? globalProducts : globalProducts.filter(p => p.category === activeCategory);
+        const products = globalData.products || [];
+        const filtered = activeCategory === 'all' ? products : products.filter(p => p.category === activeCategory);
 
         if(filtered.length === 0) {
             gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#555; padding: 20px;">${t.empty}</p>`;
@@ -191,7 +230,7 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', fetchProductsFromCloud);
+    document.addEventListener('DOMContentLoaded', fetchDataFromCloud);
 </script>
 </body>
 </html>
