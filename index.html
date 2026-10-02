@@ -40,12 +40,14 @@
         .owner-name { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
         .secure-text { font-size: 12px; color: #2ed573; font-weight: 700; background: rgba(46,213,115,0.12); display: inline-block; padding: 5px 14px; border-radius: 15px; border: 1px solid rgba(46,213,115,0.3); }
 
+        /* HIỆU ỨNG MÀU GRADIENT ĐẸP MẮT CHO MẠNG XÃ HỘI */
         .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 15px 0; transition: 0.3s; }
-        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.25s; }
-        .social-icon.fb:hover { background: #1877F2; border-color: #1877F2; box-shadow: 0 0 12px rgba(24, 119, 242, 0.7); transform: translateY(-3px); }
-        .social-icon.tt:hover { background: #00f2fe; color: #000; border-color: #00f2fe; box-shadow: 0 0 12px rgba(0, 242, 254, 0.7); transform: translateY(-3px); }
-        .social-icon.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #df5914 45%, #c62937 60%, #a5359b 90%); border-color: transparent; box-shadow: 0 0 12px rgba(198, 41, 55, 0.7); transform: translateY(-3px); }
-        .social-icon.yt:hover { background: #ff0000; border-color: #ff0000; box-shadow: 0 0 12px rgba(255, 0, 0, 0.7); transform: translateY(-3px); }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.3s; }
+        
+        .social-icon.fb:hover { background: linear-gradient(135deg, #00c6ff, #0072ff); border-color: transparent; box-shadow: 0 0 15px rgba(0, 114, 255, 0.8); transform: translateY(-3px) scale(1.1); }
+        .social-icon.tt:hover { background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; border-color: transparent; box-shadow: 0 0 15px rgba(0, 242, 254, 0.8); transform: translateY(-3px) scale(1.1); }
+        .social-icon.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #df5914 45%, #c62937 60%, #a5359b 90%); border-color: transparent; box-shadow: 0 0 15px rgba(198, 41, 55, 0.8); transform: translateY(-3px) scale(1.1); }
+        .social-icon.yt:hover { background: linear-gradient(135deg, #ff416c, #ff4b2b); border-color: transparent; box-shadow: 0 0 15px rgba(255, 65, 108, 0.8); transform: translateY(-3px) scale(1.1); }
         
         .ali-marquee-bar { background: rgba(255, 71, 87, 0.12); border-top: 1px solid rgba(255,71,87,0.3); border-bottom: 1px solid rgba(255,71,87,0.3); padding: 7px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
         .ali-marquee-bar marquee { font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,71,87,0.8); letter-spacing: 0.8px; text-transform: uppercase; }
