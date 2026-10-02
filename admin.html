@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin - Quản Trị Hệ Thống Bio</title>
-    <!-- Favicon chuẩn -->
     <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
@@ -43,7 +42,7 @@
     </div>
 
     <div class="section-box">
-        <h3>🌐 Cấu hình Mạng Xã Hội (Facebook, TikTok, Instagram, YouTube)</h3>
+        <h3>🌐 Cấu hình Mạng Xã Hội</h3>
         <div class="row">
             <div class="form-group"><label style="color:#1877F2;">📘 Facebook URL:</label><input type="text" id="socFb" placeholder="https://facebook.com/..."></div>
             <div class="form-group"><label style="color:#00f2fe;">🎵 TikTok URL:</label><input type="text" id="socTt" placeholder="https://tiktok.com/@..."></div>
@@ -56,21 +55,19 @@
     </div>
 
     <div class="section-box">
-        <h3>📦 Thêm Sản Phẩm (Chỉ nhập số tiền USD $)</h3>
+        <h3>📦 Thêm Sản Phẩm Mới (Tự động lên đầu trang)</h3>
         <div class="form-group">
-            <label>Danh mục sản phẩm:</label>
+            <label>Danh mục (Hệ thống sẽ tự phân loại theo Giảm giá & Giá tiền):</label>
             <select id="pCategory">
-                <option value="hot">🔥 Hot Sale / Mais Vendidos</option>
-                <option value="util">💧 Utilidades do Dia a Dia</option>
-                <option value="tech">⌚ Eletrônicos & Smartwatch</option>
+                <option value="hot">🔥 Sản phẩm chung / Nổi bật</option>
             </select>
         </div>
-        <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle" placeholder="Ví dụ: Rubber Gym WOD Grip Sapo"></div>
+        <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle" placeholder="Rubber Gym WOD Grip Sapo"></div>
         <div class="row">
-            <div class="form-group"><label>Giá hiện tại (Chỉ nhập số, VD: 16.95):</label><input type="text" id="pMainPrice" placeholder="16.95" oninput="autoCalculateBadge()"></div>
-            <div class="form-group"><label>Giá gốc (Chỉ nhập số, VD: 55.48):</label><input type="text" id="pSubPrice" placeholder="55.48" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá hiện tại (Chỉ nhập số, VD: 9.99):</label><input type="text" id="pMainPrice" placeholder="9.99" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá gốc (Chỉ nhập số, VD: 35.00):</label><input type="text" id="pSubPrice" placeholder="35.00" oninput="autoCalculateBadge()"></div>
         </div>
-        <div class="form-group"><label>Nhãn giảm giá (Tự động tính %):</label><input type="text" id="pBadge" placeholder="VD: 69% OFF"></div>
+        <div class="form-group"><label>Nhãn giảm giá (Tự động tính %):</label><input type="text" id="pBadge" placeholder="VD: 71% OFF"></div>
         <div class="form-group"><label>Link hình ảnh sản phẩm (URL):</label><input type="text" id="pImage" placeholder="https://..."></div>
         <div class="form-group"><label>Link mua hàng (Affiliate Link):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/..."></div>
         <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Lên Mây</button>
@@ -148,7 +145,7 @@
         cloudData.products.forEach((p, index) => {
             listDiv.innerHTML += `
                 <div class="admin-item">
-                    <span><b>[${p.category}]</b> ${p.title} (US $${p.mainPrice})</span>
+                    <span><b>[Sản phẩm]</b> ${p.title} (US $${p.mainPrice})</span>
                     <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
                 </div>
             `;
@@ -161,7 +158,7 @@
         cloudData.profile.avatar = document.getElementById('ownerAvatar').value;
         cloudData.profile.secure = document.getElementById('ownerSecure').value;
         cloudData.profile.copyright = document.getElementById('copyrightTxt').value;
-        await saveToCloud("Đã lưu thông tin Bio & Chân trang thành công!");
+        await saveToCloud("Đã lưu thông tin Bio thành công!");
     }
 
     async function updateSocials() {
@@ -197,8 +194,9 @@
         }
 
         if(!cloudData.products) cloudData.products = [];
-        cloudData.products.push(newItem);
-        await saveToCloud("Thêm sản phẩm thành công!");
+        // Đưa sản phẩm mới lên đầu mảng để khi render nó nằm trên cùng
+        cloudData.products.unshift(newItem);
+        await saveToCloud("Thêm sản phẩm thành công và đã đẩy lên đầu!");
         
         document.getElementById('pTitle').value = '';
         document.getElementById('pImage').value = '';
