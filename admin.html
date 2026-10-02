@@ -17,6 +17,10 @@
         input, select { width: 100%; padding: 10px; border: 1px solid #3f445d; background: #0c0d14; color: #fff; border-radius: 6px; font-size: 13px; }
         input:focus, select:focus { border-color: #ff4757; outline: none; }
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-with-toggle { display: flex; gap: 8px; }
+        .input-with-toggle input { flex: 1; }
+        .input-with-toggle select { width: 90px; background: #2f3640; border: 1px solid #7f8fa6; font-weight: bold; }
+        
         .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 14px; margin-top: 5px; transition: 0.2s; }
         .btn:hover { background: #ff3838; }
         .btn-profile { background: #2ed573; color: #000; }
@@ -47,33 +51,48 @@
         <div class="form-group"><label>Link ảnh đại diện (Avatar URL):</label><input type="text" id="ownerAvatar"></div>
         <div class="form-group"><label>Thông báo uy tín (Dưới tên):</label><input type="text" id="ownerSecure"></div>
         <div class="form-group"><label>Thông tin Copyright:</label><input type="text" id="copyrightTxt"></div>
-        
-        <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-top: 10px;">
-            <label style="color: #f1c40f;">CÔNG TẮC: Trạng thái Mạng Xã Hội (Toàn trang):</label>
-            <select id="showSocials">
-                <option value="true">👁️ BẬT - Hiển thị Mạng Xã Hội</option>
-                <option value="false">🚫 TẮT - Ẩn khỏi trang (Tập trung bán hàng)</option>
-            </select>
-        </div>
-
         <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio</button>
     </div>
 
     <div class="section-box">
-        <h3>🌐 Cấu hình Links Mạng Xã Hội</h3>
+        <h3>🌐 Cấu hình & Ẩn/Hiện Mạng Xã Hội (Độc lập)</h3>
         <div class="row">
-            <div class="form-group"><label style="color:#1877F2;">📘 Facebook URL:</label><input type="text" id="socFb"></div>
-            <div class="form-group"><label style="color:#00f2fe;">🎵 TikTok URL:</label><input type="text" id="socTt"></div>
+            <div class="form-group">
+                <label style="color:#1877F2;">📘 Facebook URL:</label>
+                <div class="input-with-toggle">
+                    <input type="text" id="socFb" placeholder="Link Facebook">
+                    <select id="showFb"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label style="color:#00f2fe;">🎵 TikTok URL:</label>
+                <div class="input-with-toggle">
+                    <input type="text" id="socTt" placeholder="Link TikTok">
+                    <select id="showTt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                </div>
+            </div>
         </div>
         <div class="row">
-            <div class="form-group"><label style="color:#e84393;">📸 Instagram URL:</label><input type="text" id="socIg"></div>
-            <div class="form-group"><label style="color:#ff0000;">▶️ YouTube URL:</label><input type="text" id="socYt"></div>
+            <div class="form-group">
+                <label style="color:#e84393;">📸 Instagram URL:</label>
+                <div class="input-with-toggle">
+                    <input type="text" id="socIg" placeholder="Link Instagram">
+                    <select id="showIg"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label style="color:#ff0000;">▶️ YouTube URL:</label>
+                <div class="input-with-toggle">
+                    <input type="text" id="socYt" placeholder="Link Youtube">
+                    <select id="showYt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                </div>
+            </div>
         </div>
         <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
     </div>
 
     <div class="section-box" id="productFormSection">
-        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm (Tự động Random Đánh Giá & Số lượng bán)</h3>
+        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm (Tự động Random Đánh Giá & Bán)</h3>
         <div class="form-group">
             <label>Danh mục (Tự động phân loại theo Giá / Sale):</label>
             <select id="pCategory"><option value="hot">🔥 Sản phẩm chung</option></select>
@@ -100,29 +119,36 @@
 </div>
 
 <script>
+    // NHỚ THAY LẠI KEY CỦA BẠN VÀO ĐÂY NẾU CẦN
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
 
-    let cloudData = { profile: { showSocials: true }, socials: {}, products: [] };
+    let cloudData = { profile: {}, socials: {}, products: [] };
     let editIndex = -1;
 
     async function loadAdminData() {
         try {
             let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
-            cloudData = data.record.products ? data.record : { profile: { showSocials: true }, socials: {}, products: [] };
+            cloudData = data.record.products ? data.record : { profile: {}, socials: {}, products: [] };
 
             document.getElementById('ownerName').value = cloudData.profile.name || "";
             document.getElementById('ownerAvatar').value = cloudData.profile.avatar || "";
             document.getElementById('ownerSecure').value = cloudData.profile.secure || "";
             document.getElementById('copyrightTxt').value = cloudData.profile.copyright || "";
-            document.getElementById('showSocials').value = cloudData.profile.showSocials !== false ? "true" : "false";
 
             if(cloudData.socials) {
                 document.getElementById('socFb').value = cloudData.socials.fb || "";
+                document.getElementById('showFb').value = cloudData.socials.showFb !== false ? "true" : "false";
+                
                 document.getElementById('socTt').value = cloudData.socials.tt || "";
+                document.getElementById('showTt').value = cloudData.socials.showTt !== false ? "true" : "false";
+                
                 document.getElementById('socIg').value = cloudData.socials.ig || "";
+                document.getElementById('showIg').value = cloudData.socials.showIg !== false ? "true" : "false";
+                
                 document.getElementById('socYt').value = cloudData.socials.yt || "";
+                document.getElementById('showYt').value = cloudData.socials.showYt !== false ? "true" : "false";
             }
 
             renderAdminList();
@@ -226,9 +252,8 @@
             await saveToCloud("Đã cập nhật sản phẩm!");
             cancelEdit();
         } else {
-            // Random sao từ 4.8 đến 5.0 và số lượng bán từ 2k đến 15k
             let randomRating = (Math.random() * (5.0 - 4.8) + 4.8).toFixed(1);
-            if(randomRating === "5.0") randomRating = "4.9"; // Tăng độ chân thật
+            if(randomRating === "5.0") randomRating = "4.9";
             let randomSold = Math.floor(Math.random() * 14 + 2) + "k+";
 
             const newItem = {
@@ -263,16 +288,26 @@
         cloudData.profile.avatar = document.getElementById('ownerAvatar').value;
         cloudData.profile.secure = document.getElementById('ownerSecure').value;
         cloudData.profile.copyright = document.getElementById('copyrightTxt').value;
-        cloudData.profile.showSocials = document.getElementById('showSocials').value === "true";
         await saveToCloud("Đã lưu thông tin Bio thành công!");
     }
 
     async function updateSocials() {
-        cloudData.socials = {
-            fb: document.getElementById('socFb').value, tt: document.getElementById('socTt').value,
-            ig: document.getElementById('socIg').value, yt: document.getElementById('socYt').value
-        };
-        await saveToCloud("Đã lưu mạng xã hội!");
+        if(!cloudData.socials) cloudData.socials = {};
+        
+        // Lưu cả URL và trạng thái Ẩn/Hiện của từng cái
+        cloudData.socials.fb = document.getElementById('socFb').value;
+        cloudData.socials.showFb = document.getElementById('showFb').value === "true";
+        
+        cloudData.socials.tt = document.getElementById('socTt').value;
+        cloudData.socials.showTt = document.getElementById('showTt').value === "true";
+        
+        cloudData.socials.ig = document.getElementById('socIg').value;
+        cloudData.socials.showIg = document.getElementById('showIg').value === "true";
+        
+        cloudData.socials.yt = document.getElementById('socYt').value;
+        cloudData.socials.showYt = document.getElementById('showYt').value === "true";
+        
+        await saveToCloud("Đã lưu cài đặt Mạng xã hội!");
     }
 
     async function saveToCloud(msg) {
