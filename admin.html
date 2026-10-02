@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin - Quản Trị Hệ Thống Bio</title>
+    <!-- Favicon chuẩn -->
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #0c0d14; color: #fff; padding: 20px; display: flex; justify-content: center; }
@@ -31,29 +33,15 @@
 <div class="admin-box">
     <h1>🛠️ BẢNG QUẢN TRỊ MASTER BIO</h1>
     
-    <!-- PHẦN 1: THÔNG TIN BIO & CHÂN TRANG -->
     <div class="section-box">
         <h3>👤 Chỉnh sửa Thông tin Bio & Chân trang</h3>
-        <div class="form-group">
-            <label>Tên Shop / Kênh:</label>
-            <input type="text" id="ownerName" placeholder="Achadinhos do Brasil 🇧🇷">
-        </div>
-        <div class="form-group">
-            <label>Link ảnh đại diện (Avatar URL):</label>
-            <input type="text" id="ownerAvatar" placeholder="https://...">
-        </div>
-        <div class="form-group">
-            <label>Thông báo uy tín (Dưới tên):</label>
-            <input type="text" id="ownerSecure" placeholder="🔒 100% Seguro • Verificado">
-        </div>
-        <div class="form-group">
-            <label>Thông tin Copyright (Dưới đáy trang):</label>
-            <input type="text" id="copyrightTxt" placeholder="© 2026 Achadinhos do Brasil. All Rights Reserved.">
-        </div>
+        <div class="form-group"><label>Tên Shop / Kênh:</label><input type="text" id="ownerName" placeholder="ducpm"></div>
+        <div class="form-group"><label>Link ảnh đại diện (Avatar URL):</label><input type="text" id="ownerAvatar" placeholder="https://..."></div>
+        <div class="form-group"><label>Thông báo uy tín (Dưới tên):</label><input type="text" id="ownerSecure" placeholder="🔒 100% Seguro • Verificado"></div>
+        <div class="form-group"><label>Thông tin Copyright (Dưới đáy trang):</label><input type="text" id="copyrightTxt" placeholder="© 2026 Achadinhos. All Rights Reserved."></div>
         <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio & Chân Trang</button>
     </div>
 
-    <!-- PHẦN 2: 4 MẠNG XÃ HỘI CHUẨN MÀU -->
     <div class="section-box">
         <h3>🌐 Cấu hình Mạng Xã Hội (Facebook, TikTok, Instagram, YouTube)</h3>
         <div class="row">
@@ -67,9 +55,8 @@
         <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
     </div>
 
-    <!-- PHẦN 3: THÊM SẢN PHẨM & TỰ ĐỘNG TÍNH % GIẢM GIÁ -->
     <div class="section-box">
-        <h3>📦 Thêm Sản Phẩm (Tự động tính % giảm giá)</h3>
+        <h3>📦 Thêm Sản Phẩm (Chỉ nhập số tiền USD $)</h3>
         <div class="form-group">
             <label>Danh mục sản phẩm:</label>
             <select id="pCategory">
@@ -78,24 +65,14 @@
                 <option value="tech">⌚ Eletrônicos & Smartwatch</option>
             </select>
         </div>
-        <div class="form-group">
-            <label>Tên sản phẩm:</label>
-            <input type="text" id="pTitle" placeholder="Ví dụ: Copo Térmico Inox 1.2L">
-        </div>
+        <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle" placeholder="Ví dụ: Rubber Gym WOD Grip Sapo"></div>
         <div class="row">
-            <div class="form-group"><label>Giá hiện tại (Main Price):</label><input type="text" id="pMainPrice" placeholder="R$ 39,90" oninput="autoCalculateBadge()"></div>
-            <div class="form-group"><label>Giá gốc (Sub Price):</label><input type="text" id="pSubPrice" placeholder="R$ 120,00" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá hiện tại (Chỉ nhập số, VD: 16.95):</label><input type="text" id="pMainPrice" placeholder="16.95" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá gốc (Chỉ nhập số, VD: 55.48):</label><input type="text" id="pSubPrice" placeholder="55.48" oninput="autoCalculateBadge()"></div>
         </div>
-        <div class="form-group">
-            <label>Nhãn giảm giá (Tự động tính hoặc sửa tay):</label>
-            <input type="text" id="pBadge" placeholder="VD: 67% OFF">
-        </div>
-        <div class="form-group">
-            <label>Link hình ảnh sản phẩm (URL):</label><input type="text" id="pImage" placeholder="https://...">
-        </div>
-        <div class="form-group">
-            <label>Link mua hàng (Affiliate Link):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/...">
-        </div>
+        <div class="form-group"><label>Nhãn giảm giá (Tự động tính %):</label><input type="text" id="pBadge" placeholder="VD: 69% OFF"></div>
+        <div class="form-group"><label>Link hình ảnh sản phẩm (URL):</label><input type="text" id="pImage" placeholder="https://..."></div>
+        <div class="form-group"><label>Link mua hàng (Affiliate Link):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/..."></div>
         <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Lên Mây</button>
     </div>
 
@@ -128,7 +105,7 @@
             });
             let data = await res.json();
             cloudData = data.record.products ? data.record : { 
-                profile: { name: "Achadinhos do Brasil 🇧🇷", avatar: "", secure: "🔒 100% Seguro • Verificado", copyright: "© 2026 Achadinhos do Brasil. All Rights Reserved." },
+                profile: { name: "ducpm", avatar: "", secure: "🔒 100% Seguro • Verificado", copyright: "© 2026 Achadinhos. All Rights Reserved." },
                 socials: { fb: "", tt: "", ig: "", yt: "" },
                 products: [] 
             };
@@ -152,11 +129,8 @@
     }
 
     function autoCalculateBadge() {
-        let mainStr = document.getElementById('pMainPrice').value;
-        let subStr = document.getElementById('pSubPrice').value;
-        
-        let mainNum = parseFloat(mainStr.replace(/[^\d,.]/g, '').replace(',', '.'));
-        let subNum = parseFloat(subStr.replace(/[^\d,.]/g, '').replace(',', '.'));
+        let mainNum = parseFloat(document.getElementById('pMainPrice').value.replace(',', '.'));
+        let subNum = parseFloat(document.getElementById('pSubPrice').value.replace(',', '.'));
 
         if(mainNum && subNum && subNum > mainNum) {
             let discount = Math.round(((subNum - mainNum) / subNum) * 100);
@@ -174,7 +148,7 @@
         cloudData.products.forEach((p, index) => {
             listDiv.innerHTML += `
                 <div class="admin-item">
-                    <span><b>[${p.category}]</b> ${p.title} (${p.mainPrice})</span>
+                    <span><b>[${p.category}]</b> ${p.title} (US $${p.mainPrice})</span>
                     <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
                 </div>
             `;
@@ -201,15 +175,18 @@
     }
 
     async function addNewProduct() {
+        let rawMain = document.getElementById('pMainPrice').value.trim();
+        let rawSub = document.getElementById('pSubPrice').value.trim();
+
         const newItem = {
             id: Date.now(),
             category: document.getElementById('pCategory').value,
             title: document.getElementById('pTitle').value,
             image: document.getElementById('pImage').value,
             link: document.getElementById('pLink').value,
-            mainPrice: document.getElementById('pMainPrice').value,
-            subPrice: document.getElementById('pSubPrice').value,
-            badge: document.getElementById('pBadge').value || "HOT",
+            mainPrice: rawMain,
+            subPrice: rawSub,
+            badge: document.getElementById('pBadge').value || "SALE",
             rating: "4.9",
             sold: "2k+"
         };
