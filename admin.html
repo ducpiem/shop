@@ -35,9 +35,7 @@
         
         .btn-action-group { display: flex; gap: 6px; }
         .btn-edit { background: #f39c12; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-edit:hover { background: #e67e22; }
         .btn-del { background: #e53935; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-del:hover { background: #c62828; }
     </style>
 </head>
 <body>
@@ -68,7 +66,7 @@
                 <label style="color:#00f2fe;">🎵 TikTok:</label>
                 <div class="input-with-toggle">
                     <input type="text" id="socTt" placeholder="Link TikTok">
-                    <select id="showTt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
+                    <select id="showTt"><option value="true">👁️️ Hiện</option><option value="false">🚫 Ẩn</option></select>
                 </div>
             </div>
         </div>
@@ -91,24 +89,24 @@
         <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
     </div>
 
-    <div class="section-box" id="productFormSection">
-        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm & Danh Mục Tùy Chỉnh</h3>
-        
-        <!-- PHẦN NHẬP DANH MỤC TÙY CHỈNH -->
-        <div class="form-group">
-            <label>Danh mục sản phẩm (Chọn nhanh hoặc gõ tên mới):</label>
-            <div style="display:flex; gap:8px;">
-                <select id="pCategorySelect" onchange="document.getElementById('pCategoryInput').value = this.value;" style="flex:1;">
-                    <option value="Sạc & Cáp">⚡ Sạc & Cáp</option>
-                    <option value="Tai nghe">🎧 Tai nghe</option>
-                    <option value="Đồng hồ">⌚ Đồng hồ & Smartwatch</option>
-                    <option value="Gia dụng">🏠 Đồ gia dụng</option>
-                    <option value="Khác">🔥 Khác / Phổ biến</option>
-                </select>
-                <input type="text" id="pCategoryInput" value="Sạc & Cáp" placeholder="Hoặc gõ tên danh mục mới..." style="flex:1;">
-            </div>
+    <!-- PHẦN QUẢN LÝ DANH MỤC RIÊNG BIỆT -->
+    <div class="section-box">
+        <h3>📂 Quản Lý Danh Mục (Thêm / Xóa Danh Mục Menu)</h3>
+        <div class="row">
+            <div class="form-group"><label>Tên danh mục:</label><input type="text" id="newCatName" placeholder="VD: Sạc & Cáp"></div>
+            <div class="form-group"><label>Icon (Emoji hoặc FontAwesome):</label><input type="text" id="newCatIcon" placeholder="VD: ⚡"></div>
         </div>
+        <button class="btn btn-profile" onclick="addCategory()" style="background:#0984e3; color:#fff;">➕ Thêm Danh Mục Mới</button>
+        <div id="categoryListAdmin" style="margin-top: 10px;"></div>
+    </div>
 
+    <!-- PHẦN THÊM / SỬA SẢN PHẨM -->
+    <div class="section-box" id="productFormSection">
+        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm</h3>
+        <div class="form-group">
+            <label>Chọn danh mục cho sản phẩm:</label>
+            <select id="pCategorySelect"></select>
+        </div>
         <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle"></div>
         <div class="row">
             <div class="form-group"><label>Giá hiện tại (Số, VD: 9.99):</label><input type="text" id="pMainPrice" oninput="autoCalculateBadge()"></div>
@@ -134,14 +132,26 @@
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
 
-    let cloudData = { profile: {}, socials: {}, products: [] };
+    let cloudData = { profile: {}, socials: {}, categories: [], products: [] };
     let editIndex = -1;
+
+    // Danh mục mặc định nếu lần đầu chưa có
+    const defaultCategories = [
+        { name: "Tất cả", icon: "🔥" },
+        { name: "Giảm 50%+", icon: "⚡" },
+        { name: "Free Ship", icon: "🚚" },
+        { name: "Dưới $10", icon: "💲" }
+    ];
 
     async function loadAdminData() {
         try {
             let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
-            cloudData = data.record.products ? data.record : { profile: {}, socials: {}, products: [] };
+            cloudData = data.record.products ? data.record : { profile: {}, socials: {}, categories: defaultCategories, products: [] };
+
+            if(!cloudData.categories || cloudData.categories.length === 0) {
+                cloudData.categories = defaultCategories;
+            }
 
             document.getElementById('ownerName').value = cloudData.profile.name || "";
             document.getElementById('ownerAvatar').value = cloudData.profile.avatar || "";
@@ -159,10 +169,52 @@
                 document.getElementById('showYt').value = cloudData.socials.showYt !== false ? "true" : "false";
             }
 
+            renderCategoryDropdown();
+            renderCategoryManagerList();
             renderAdminList();
         } catch (err) {
             document.getElementById('currentProductsList').innerHTML = "Lỗi kết nối kho mây.";
         }
+    }
+
+    function renderCategoryDropdown() {
+        const select = document.getElementById('pCategorySelect');
+        select.innerHTML = '';
+        (cloudData.categories || []).forEach(c => {
+            if(c.name !== "Tất cả" && c.name !== "Giảm 50%+" && c.name !== "Free Ship" && c.name !== "Dưới $10") {
+                select.innerHTML += `<option value="${c.name}">${c.icon || '📁'} ${c.name}</option>`;
+            }
+        });
+    }
+
+    function renderCategoryManagerList() {
+        const div = document.getElementById('categoryListAdmin');
+        div.innerHTML = '';
+        (cloudData.categories || []).forEach((c, index) => {
+            div.innerHTML += `
+                <div class="admin-item">
+                    <span>${c.icon || '📁'} <b>${c.name}</b></span>
+                    <button class="btn-del" onclick="deleteCategory(${index})" style="padding:4px 8px; font-size:11px;">🗑️ Xóa</button>
+                </div>
+            `;
+        });
+    }
+
+    async function addCategory() {
+        let name = document.getElementById('newCatName').value.trim();
+        let icon = document.getElementById('newCatIcon').value.trim() || '📁';
+        if(!name) { alert("Vui lòng nhập tên danh mục!"); return; }
+        
+        cloudData.categories.push({ name, icon });
+        document.getElementById('newCatName').value = '';
+        document.getElementById('newCatIcon').value = '';
+        await saveToCloud("Đã thêm danh mục mới!");
+    }
+
+    async function deleteCategory(index) {
+        if(!confirm("Xóa danh mục này?")) return;
+        cloudData.categories.splice(index, 1);
+        await saveToCloud("Đã xóa danh mục!");
     }
 
     function autoCalculateBadge() {
@@ -212,7 +264,7 @@
 
     function startEdit(index) {
         editIndex = index; let p = cloudData.products[index];
-        document.getElementById('pCategoryInput').value = p.category || 'Khác';
+        document.getElementById('pCategorySelect').value = p.category || '';
         document.getElementById('pTitle').value = p.title || '';
         document.getElementById('pMainPrice').value = p.mainPrice || '';
         document.getElementById('pSubPrice').value = p.subPrice || '';
@@ -234,7 +286,7 @@
         document.getElementById('pSubPrice').value = ''; document.getElementById('pBadge').value = '';
         document.getElementById('pImage').value = ''; document.getElementById('pLink').value = '';
 
-        document.getElementById('formTitle').innerText = "📦 Thêm Sản Phẩm Mới & Danh Mục";
+        document.getElementById('formTitle').innerText = "📦 Thêm Sản Phẩm Mới";
         document.getElementById('formTitle').style.color = "#a4b0be";
         let btn = document.getElementById('btnSubmitProduct');
         btn.innerText = "➕ Thêm Sản Phẩm Lên Mây"; btn.style.background = "#ff4757";
@@ -242,7 +294,7 @@
     }
 
     async function saveProductAction() {
-        let rawCategory = document.getElementById('pCategoryInput').value.trim() || 'Khác';
+        let category = document.getElementById('pCategorySelect').value || 'Khác';
         let rawMain = document.getElementById('pMainPrice').value.trim();
         let rawSub = document.getElementById('pSubPrice').value.trim();
 
@@ -253,7 +305,7 @@
         if(!cloudData.products) cloudData.products = [];
 
         if(editIndex > -1) {
-            cloudData.products[editIndex].category = rawCategory;
+            cloudData.products[editIndex].category = category;
             cloudData.products[editIndex].title = document.getElementById('pTitle').value;
             cloudData.products[editIndex].mainPrice = rawMain;
             cloudData.products[editIndex].subPrice = rawSub;
@@ -269,7 +321,7 @@
 
             const newItem = {
                 id: Date.now(),
-                category: rawCategory,
+                category: category,
                 title: document.getElementById('pTitle').value,
                 image: document.getElementById('pImage').value,
                 link: document.getElementById('pLink').value,
@@ -322,7 +374,10 @@
                 method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
                 body: JSON.stringify(cloudData)
             });
-            alert(msg); renderAdminList();
+            alert(msg); 
+            renderCategoryDropdown();
+            renderCategoryManagerList();
+            renderAdminList();
         } catch (err) { alert("Lỗi mạng."); } finally { document.getElementById('loadingText').style.display = 'none'; }
     }
 
