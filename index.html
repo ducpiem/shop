@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achadinhos do Brasil - Cloud Live</title>
+    <title>Achadinhos do Brasil - Ofertas Exclusivas</title>
     <style>
         :root { --primary-red: #ff4757; --ali-red: #e53935; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -70,7 +70,7 @@
 <div class="container">
     <div class="top-bar">
         <span></span>
-        <select class="lang-select">
+        <select class="lang-select" id="langSelect" onchange="changeLanguage()">
             <option value="pt" selected>🇧🇷 Português</option>
             <option value="en">🇺🇸 English</option>
         </select>
@@ -79,32 +79,60 @@
     <div class="header">
         <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Profile">
         <div class="owner-name">Achadinhos do Brasil 🇧🇷</div>
-        <div class="secure-text">🔒 100% Seguro • Verificado</div>
+        <div class="secure-text" id="txtSecure">🔒 100% Seguro • Verificado</div>
     </div>
 
     <div class="category-tabs">
-        <button class="tab-btn active" onclick="filterCategory('all', this)">🔥 Todos</button>
-        <button class="tab-btn" onclick="filterCategory('hot', this)">⚡ Hot Sale</button>
-        <button class="tab-btn" onclick="filterCategory('util', this)">💧 Utilidades</button>
-        <button class="tab-btn" onclick="filterCategory('tech', this)">⌚ Eletrônicos</button>
+        <button class="tab-btn active" onclick="filterCategory('all', this)" id="tabAll">🔥 Todos</button>
+        <button class="tab-btn" onclick="filterCategory('hot', this)" id="tabHot">⚡ Hot Sale</button>
+        <button class="tab-btn" onclick="filterCategory('util', this)" id="tabUtil">💧 Utilidades</button>
+        <button class="tab-btn" onclick="filterCategory('tech', this)" id="tabTech">⌚ Eletrônicos</button>
     </div>
 
     <div id="productGrid" class="product-grid">
-        <div class="loading-msg">Carregando ofertas da nuvem... 🔄</div>
+        <div class="loading-msg" id="loadText">Carregando ofertas da nuvem... 🔄</div>
     </div>
 </div>
 
 <script>
-    // 🔑 HÃY THAY MÃ BIN ID CỦA BẠN VÀO ĐÂY (Lấy từ JSONBin)
-    const BIN_ID = "6abf812cffd5d16053458888
-"; 
-
+    const BIN_ID = "6abf812cffd5d16053458888";
     let globalProducts = [];
     let activeCategory = 'all';
 
+    // Từ điển ngôn ngữ
+    const translations = {
+        pt: {
+            secure: "🔒 100% Seguro • Verificado",
+            all: "🔥 Todos",
+            hot: "⚡ Hot Sale",
+            util: "💧 Utilidades",
+            tech: "⌚ Eletrônicos",
+            shipping: "⚡ Frete Grátis",
+            buy: "COMPRAR AGORA 🛒",
+            loading: "Carregando ofertas da nuvem... 🔄",
+            empty: "Nenhum produto encontrado."
+        },
+        en: {
+            secure: "🔒 100% Secure • Verified",
+            all: "🔥 All Items",
+            hot: "⚡ Hot Sale",
+            util: "💧 Utilities",
+            tech: "⌚ Electronics",
+            shipping: "⚡ Free Shipping",
+            buy: "BUY NOW 🛒",
+            loading: "Loading offers from cloud... 🔄",
+            empty: "No products found."
+        }
+    };
+
+    function changeLanguage() {
+        renderGrid();
+    }
+
     async function fetchProductsFromCloud() {
         try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+            // Thêm chuỗi thời gian ngẫu nhiên để tránh trình duyệt lưu cache cũ (nguyên nhân không hiện sản phẩm mới)
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`);
             let data = await res.json();
             globalProducts = data.record.products || [];
             renderGrid();
@@ -121,13 +149,23 @@
     }
 
     function renderGrid() {
+        const lang = document.getElementById('langSelect').value;
+        const t = translations[lang];
+
+        // Cập nhật text giao diện theo ngôn ngữ
+        document.getElementById('txtSecure').innerText = t.secure;
+        document.getElementById('tabAll').innerText = t.all;
+        document.getElementById('tabHot').innerText = t.hot;
+        document.getElementById('tabUtil').innerText = t.util;
+        document.getElementById('tabTech').innerText = t.tech;
+
         const gridContainer = document.getElementById('productGrid');
         gridContainer.innerHTML = '';
 
         const filtered = activeCategory === 'all' ? globalProducts : globalProducts.filter(p => p.category === activeCategory);
 
         if(filtered.length === 0) {
-            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#555; padding: 20px;">Nenhum produto encontrado.</p>`;
+            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#555; padding: 20px;">${t.empty}</p>`;
             return;
         }
 
@@ -145,8 +183,8 @@
                         </div>
                         <div class="price-main">${p.mainPrice}</div>
                         <div class="price-sub">${p.subPrice}</div>
-                        <div class="shipping-tag">⚡ Frete Grátis</div>
-                        <div class="buy-btn">COMPRAR AGORA 🛒</div>
+                        <div class="shipping-tag">${t.shipping}</div>
+                        <div class="buy-btn">${t.buy}</div>
                     </div>
                 </a>
             `;
