@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin - Quản Trị Hệ Thống Bio</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/ducpiem/ducpm/refs/heads/ducpiem/Dlogo-removebg-preview.png">
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #0c0d14; color: #fff; padding: 20px; display: flex; justify-content: center; }
@@ -55,17 +55,17 @@
     </div>
 
     <div class="section-box">
-        <h3>🌐 Cấu hình & Ẩn/Hiện Mạng Xã Hội (Độc lập)</h3>
+        <h3>🌐 Cấu hình Mạng Xã Hội (Độc lập Ẩn/Hiện)</h3>
         <div class="row">
             <div class="form-group">
-                <label style="color:#1877F2;">📘 Facebook URL:</label>
+                <label style="color:#1877F2;">📘 Facebook:</label>
                 <div class="input-with-toggle">
-                    <input type="text" id="socFb" placeholder="Link Facebook">
+                    <input type="text" id="socFb" placeholder="Link FB">
                     <select id="showFb"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
                 </div>
             </div>
             <div class="form-group">
-                <label style="color:#00f2fe;">🎵 TikTok URL:</label>
+                <label style="color:#00f2fe;">🎵 TikTok:</label>
                 <div class="input-with-toggle">
                     <input type="text" id="socTt" placeholder="Link TikTok">
                     <select id="showTt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
@@ -74,16 +74,16 @@
         </div>
         <div class="row">
             <div class="form-group">
-                <label style="color:#e84393;">📸 Instagram URL:</label>
+                <label style="color:#e84393;">📸 Instagram:</label>
                 <div class="input-with-toggle">
-                    <input type="text" id="socIg" placeholder="Link Instagram">
+                    <input type="text" id="socIg" placeholder="Link IG">
                     <select id="showIg"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
                 </div>
             </div>
             <div class="form-group">
-                <label style="color:#ff0000;">▶️ YouTube URL:</label>
+                <label style="color:#ff0000;">▶️ YouTube:</label>
                 <div class="input-with-toggle">
-                    <input type="text" id="socYt" placeholder="Link Youtube">
+                    <input type="text" id="socYt" placeholder="Link YT">
                     <select id="showYt"><option value="true">👁️ Hiện</option><option value="false">🚫 Ẩn</option></select>
                 </div>
             </div>
@@ -92,11 +92,23 @@
     </div>
 
     <div class="section-box" id="productFormSection">
-        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm (Tự động Random Đánh Giá & Bán)</h3>
+        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm & Danh Mục Tùy Chỉnh</h3>
+        
+        <!-- PHẦN NHẬP DANH MỤC TÙY CHỈNH -->
         <div class="form-group">
-            <label>Danh mục (Tự động phân loại theo Giá / Sale):</label>
-            <select id="pCategory"><option value="hot">🔥 Sản phẩm chung</option></select>
+            <label>Danh mục sản phẩm (Chọn nhanh hoặc gõ tên mới):</label>
+            <div style="display:flex; gap:8px;">
+                <select id="pCategorySelect" onchange="document.getElementById('pCategoryInput').value = this.value;" style="flex:1;">
+                    <option value="Sạc & Cáp">⚡ Sạc & Cáp</option>
+                    <option value="Tai nghe">🎧 Tai nghe</option>
+                    <option value="Đồng hồ">⌚ Đồng hồ & Smartwatch</option>
+                    <option value="Gia dụng">🏠 Đồ gia dụng</option>
+                    <option value="Khác">🔥 Khác / Phổ biến</option>
+                </select>
+                <input type="text" id="pCategoryInput" value="Sạc & Cáp" placeholder="Hoặc gõ tên danh mục mới..." style="flex:1;">
+            </div>
         </div>
+
         <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle"></div>
         <div class="row">
             <div class="form-group"><label>Giá hiện tại (Số, VD: 9.99):</label><input type="text" id="pMainPrice" oninput="autoCalculateBadge()"></div>
@@ -119,7 +131,6 @@
 </div>
 
 <script>
-    // NHỚ THAY LẠI KEY CỦA BẠN VÀO ĐÂY NẾU CẦN
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
 
@@ -140,13 +151,10 @@
             if(cloudData.socials) {
                 document.getElementById('socFb').value = cloudData.socials.fb || "";
                 document.getElementById('showFb').value = cloudData.socials.showFb !== false ? "true" : "false";
-                
                 document.getElementById('socTt').value = cloudData.socials.tt || "";
                 document.getElementById('showTt').value = cloudData.socials.showTt !== false ? "true" : "false";
-                
                 document.getElementById('socIg').value = cloudData.socials.ig || "";
                 document.getElementById('showIg').value = cloudData.socials.showIg !== false ? "true" : "false";
-                
                 document.getElementById('socYt').value = cloudData.socials.yt || "";
                 document.getElementById('showYt').value = cloudData.socials.showYt !== false ? "true" : "false";
             }
@@ -184,7 +192,7 @@
                         <img class="item-img" src="${p.image || 'https://via.placeholder.com/45'}" alt="Thumb">
                         <div class="item-text">
                             <b style="color:${p.pinned ? '#f1c40f' : '#fff'};">${p.pinned ? '📌 ' : ''}${p.title}</b>
-                            <span style="color:#a4b0be; font-size:11px;">Giá: $${p.mainPrice} | Đã bán: ${p.sold || 'N/A'}</span>
+                            <span style="color:#a4b0be; font-size:11px;">[${p.category || 'Khác'}] | Giá: $${p.mainPrice}</span>
                         </div>
                     </div>
                     <div class="btn-action-group">
@@ -199,11 +207,12 @@
 
     async function togglePin(index) {
         cloudData.products[index].pinned = !cloudData.products[index].pinned;
-        await saveToCloud(cloudData.products[index].pinned ? "Đã ghim sản phẩm thành công!" : "Đã bỏ ghim!");
+        await saveToCloud(cloudData.products[index].pinned ? "Đã ghim sản phẩm!" : "Đã bỏ ghim!");
     }
 
     function startEdit(index) {
         editIndex = index; let p = cloudData.products[index];
+        document.getElementById('pCategoryInput').value = p.category || 'Khác';
         document.getElementById('pTitle').value = p.title || '';
         document.getElementById('pMainPrice').value = p.mainPrice || '';
         document.getElementById('pSubPrice').value = p.subPrice || '';
@@ -225,7 +234,7 @@
         document.getElementById('pSubPrice').value = ''; document.getElementById('pBadge').value = '';
         document.getElementById('pImage').value = ''; document.getElementById('pLink').value = '';
 
-        document.getElementById('formTitle').innerText = "📦 Thêm Sản Phẩm Mới";
+        document.getElementById('formTitle').innerText = "📦 Thêm Sản Phẩm Mới & Danh Mục";
         document.getElementById('formTitle').style.color = "#a4b0be";
         let btn = document.getElementById('btnSubmitProduct');
         btn.innerText = "➕ Thêm Sản Phẩm Lên Mây"; btn.style.background = "#ff4757";
@@ -233,6 +242,7 @@
     }
 
     async function saveProductAction() {
+        let rawCategory = document.getElementById('pCategoryInput').value.trim() || 'Khác';
         let rawMain = document.getElementById('pMainPrice').value.trim();
         let rawSub = document.getElementById('pSubPrice').value.trim();
 
@@ -243,6 +253,7 @@
         if(!cloudData.products) cloudData.products = [];
 
         if(editIndex > -1) {
+            cloudData.products[editIndex].category = rawCategory;
             cloudData.products[editIndex].title = document.getElementById('pTitle').value;
             cloudData.products[editIndex].mainPrice = rawMain;
             cloudData.products[editIndex].subPrice = rawSub;
@@ -258,7 +269,7 @@
 
             const newItem = {
                 id: Date.now(),
-                category: document.getElementById('pCategory').value,
+                category: rawCategory,
                 title: document.getElementById('pTitle').value,
                 image: document.getElementById('pImage').value,
                 link: document.getElementById('pLink').value,
@@ -288,26 +299,20 @@
         cloudData.profile.avatar = document.getElementById('ownerAvatar').value;
         cloudData.profile.secure = document.getElementById('ownerSecure').value;
         cloudData.profile.copyright = document.getElementById('copyrightTxt').value;
-        await saveToCloud("Đã lưu thông tin Bio thành công!");
+        await saveToCloud("Đã lưu thông tin Bio!");
     }
 
     async function updateSocials() {
         if(!cloudData.socials) cloudData.socials = {};
-        
-        // Lưu cả URL và trạng thái Ẩn/Hiện của từng cái
         cloudData.socials.fb = document.getElementById('socFb').value;
         cloudData.socials.showFb = document.getElementById('showFb').value === "true";
-        
         cloudData.socials.tt = document.getElementById('socTt').value;
         cloudData.socials.showTt = document.getElementById('showTt').value === "true";
-        
         cloudData.socials.ig = document.getElementById('socIg').value;
         cloudData.socials.showIg = document.getElementById('showIg').value === "true";
-        
         cloudData.socials.yt = document.getElementById('socYt').value;
         cloudData.socials.showYt = document.getElementById('showYt').value === "true";
-        
-        await saveToCloud("Đã lưu cài đặt Mạng xã hội!");
+        await saveToCloud("Đã lưu mạng xã hội!");
     }
 
     async function saveToCloud(msg) {
