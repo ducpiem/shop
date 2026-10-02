@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achadinhos do Brasil - AliExpress Exclusive Deals</title>
+    <title>Life in Sketches
+ do Brasil - AliExpress Exclusive Deals</title>
     <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         :root { --primary-red: #ff4757; --ali-red: #ff6b81; }
@@ -46,11 +47,16 @@
         .ali-marquee-bar { background: rgba(255, 71, 87, 0.12); border-top: 1px solid rgba(255,71,87,0.3); border-bottom: 1px solid rgba(255,71,87,0.3); padding: 7px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
         .ali-marquee-bar marquee { font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,71,87,0.8); letter-spacing: 0.8px; text-transform: uppercase; }
 
-        /* THANH DANH MỤC ĐỘNG */
-        .category-tabs { display: flex; justify-content: flex-start; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; scrollbar-width: none; }
-        .category-tabs::-webkit-scrollbar { display: none; }
-        .tab-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #a4b0be; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-        .tab-btn.active { background: var(--primary-red); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(255,71,87,0.4); }
+        /* KHUNG MENU XỔ XUỐNG (DROPDOWN) ĐẸP MẮT */
+        .category-dropdown-box { padding: 0 15px 15px 15px; }
+        .custom-dropdown {
+            width: 100%; padding: 12px 15px; border-radius: 10px; 
+            background: rgba(30, 33, 48, 0.95); border: 1px solid rgba(255, 71, 87, 0.5); 
+            color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); outline: none;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .custom-dropdown option { background: #161822; color: #fff; padding: 10px; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; flex-grow: 1; }
         .product-card { 
@@ -135,9 +141,11 @@
         </marquee>
     </div>
 
-    <!-- THANH DANH MỤC ĐỘNG TỰ SINH THEO SẢN PHẨM -->
-    <div class="category-tabs" id="categoryTabsContainer">
-        <button class="tab-btn active" onclick="filterCategory('all', this)">🔥 Tất cả</button>
+    <!-- KHUNG DROPDOWN XỔ XUỐNG CHỌN DANH MỤC -->
+    <div class="category-dropdown-box">
+        <select id="categoryDropdown" class="custom-dropdown" onchange="filterCategory(this.value)">
+            <option value="all">🔥 Tất cả sản phẩm</option>
+        </select>
     </div>
 
     <div id="productGrid" class="product-grid"></div>
@@ -145,7 +153,7 @@
     <div class="footer" id="footerCopyright">© 2026 Achadinhos. All Rights Reserved.</div>
 </div>
 
-<div id="copyToast">Đã sao chép link Affiliate! ✔️️</div>
+<div id="copyToast">Đã sao chép link Affiliate! ✔</div>
 
 <div id="fakeSalePopup" class="fake-sale">
     <img id="fsImg" src="" alt="Sản phẩm">
@@ -160,15 +168,22 @@
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
     
-    let globalData = { profile: {}, socials: {}, products: [] };
+    let globalData = { profile: {}, socials: {}, categories: [], products: [] };
     let activeCategory = 'all';
 
+    const defaultCategories = [
+        { name: "all", label: "🔥 Tất cả sản phẩm" },
+        { name: "discount50", label: "⚡ Giảm 50%+" },
+        { name: "freeship", label: "🚚 Free Ship" },
+        { name: "under10", label: "💲 Dưới $10" }
+    ];
+
     const translations = {
-        vi: { all: "🔥 Tất cả", shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
-        pt: { all: "🔥 Todos", shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
-        en: { all: "🔥 All Items", shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
-        fr: { all: "🔥 Tous", shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
-        es: { all: "🔥 Todos", shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
+        vi: { shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
+        pt: { shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
+        en: { shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
+        fr: { shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
+        es: { shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
     };
 
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
@@ -183,7 +198,7 @@
 
     function changeLanguage() {
         localStorage.setItem('user_lang', document.getElementById('langSelect').value);
-        renderCategories();
+        renderCategoriesDropdown();
         renderGrid();
     }
 
@@ -203,15 +218,19 @@
         try {
             let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
-            globalData = data.record || { profile: {}, socials: {}, products: [] };
+            globalData = data.record || { profile: {}, socials: {}, categories: [], products: [] };
             
+            if(!globalData.categories || globalData.categories.length === 0) {
+                globalData.categories = defaultCategories;
+            }
+
             if(globalData.profile.name) document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
             if(globalData.profile.avatar) document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
             if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
             if(globalData.profile.copyright) document.getElementById('footerCopyright').innerText = globalData.profile.copyright;
 
             renderSocials(); 
-            renderCategories();
+            renderCategoriesDropdown();
             renderGrid();
         } catch (err) {}
     }
@@ -227,29 +246,28 @@
         if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
     }
 
-    // TỰ ĐỘNG QUÉT VÀ HIỂN THỊ CÁC DANH MỤC TỪ KHO SẢN PHẨM
-    function renderCategories() {
-        const lang = document.getElementById('langSelect').value; 
-        const t = translations[lang] || translations.vi;
-        const container = document.getElementById('categoryTabsContainer');
-        
-        // Lấy danh sách các danh mục duy nhất từ sản phẩm
-        let cats = [...new Set((globalData.products || []).map(p => p.category || 'Khác'))];
-        
-        let html = `<button class="tab-btn ${activeCategory === 'all' ? 'active' : ''}" onclick="filterCategory('all', this)">${t.all}</button>`;
-        
-        cats.forEach(cat => {
-            let isActive = activeCategory === cat ? 'active' : '';
-            html += `<button class="tab-btn ${isActive}" onclick="filterCategory('${cat}', this)">📁 ${cat}</button>`;
+    // RENDER DANH MỤC XỔ XUỐNG KÈM ICON
+    function renderCategoriesDropdown() {
+        const dropdown = document.getElementById('categoryDropdown');
+        dropdown.innerHTML = `
+            <option value="all">🔥 Tất cả sản phẩm</option>
+            <option value="discount50">⚡ Giảm 50%+</option>
+            <option value="freeship">🚚 Free Ship</option>
+            <option value="under10">💲 Dưới $10</option>
+        `;
+
+        // Thêm các danh mục tự tạo từ Admin vào dropdown
+        (globalData.categories || []).forEach(c => {
+            if(c.name !== "all" && c.name !== "discount50" && c.name !== "freeship" && c.name !== "under10") {
+                dropdown.innerHTML += `<option value="${c.name}">${c.icon || '📁'} ${c.name}</option>`;
+            }
         });
-        
-        container.innerHTML = html;
+
+        dropdown.value = activeCategory;
     }
 
-    function filterCategory(cat, btn) {
-        activeCategory = cat;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
+    function filterCategory(val) {
+        activeCategory = val;
         renderGrid();
     }
 
@@ -267,14 +285,21 @@
         const gridContainer = document.getElementById('productGrid'); gridContainer.innerHTML = '';
         
         let filtered = (globalData.products || []).filter(p => {
+            let badgeNum = parseInt((p.badge || "").replace(/[^\d]/g, '')) || 0;
+            let mainPriceNum = parseFloat((p.mainPrice || "0").replace(/[^\d,.]/g, '').replace(',', '.')) || 0;
+
+            if (activeCategory === 'discount50') return badgeNum >= 50;
+            if (activeCategory === 'freeship') return true;
+            if (activeCategory === 'under10') return mainPriceNum > 0 && mainPriceNum < 10;
             if (activeCategory === 'all') return true;
-            return (p.category || 'Khác') === activeCategory;
+            
+            return (p.category || '') === activeCategory;
         });
 
         filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
         if(filtered.length === 0) {
-            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#a4b0be; padding: 25px;">Không có sản phẩm trong danh mục này.</p>`;
+            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#a4b0be; padding: 25px;">Không tìm thấy sản phẩm nào.</p>`;
             return;
         }
 
