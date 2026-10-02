@@ -3,86 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - Achadinhos</title>
+    <title>Painel de Controle - Master Admin</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
         .admin-box { width: 100%; max-width: 650px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
+        .section-box { background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; }
+        .section-box h3 { font-size: 16px; margin-bottom: 10px; color: #444; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px; color: #555; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 15px; margin-top: 10px; }
+        .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 15px; margin-top: 5px; }
         .btn:hover { background: #ff3838; }
+        .btn-profile { background: #2ed573; }
+        .btn-profile:hover { background: #26af5f; }
         .loading { text-align: center; color: #005bed; font-weight: bold; margin-top: 10px; display: none; }
         
-        /* Danh sách sản phẩm trong admin để xóa */
-        .admin-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 15px; }
-        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #f9f9f9; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border: 1px solid #e1e1e1; }
         .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-del:hover { background: #c62828; }
     </style>
 </head>
 <body>
 
 <div class="admin-box">
-    <h1>🛠️ Quản Trị Sản Phẩm (Cloud Sync)</h1>
+    <h1>🛠️ Bảng Quản Trị Hệ Thống Bio</h1>
     
-    <div class="form-group">
-        <label>Bin ID hiện tại (Đã cố định):</label>
-        <input type="text" id="binId" value="6abf812cffd5d16053458888" disabled style="background:#e9ecef; color:#666;">
+    <!-- PHẦN 1: CẬP NHẬT THÔNG TIN CHỦ SHOP -->
+    <div class="section-box">
+        <h3>👤 Cập nhật thông tin trang Bio (Avatar, Tên...)</h3>
+        <div class="form-group">
+            <label>Tên chủ Shop / Kênh:</label>
+            <input type="text" id="ownerName" placeholder="Ví dụ: Achadinhos do Brasil 🇧🇷">
+        </div>
+        <div class="form-group">
+            <label>Link ảnh đại diện (Avatar URL):</label>
+            <input type="text" id="ownerAvatar" placeholder="https://images.unsplash.com/...">
+        </div>
+        <div class="form-group">
+            <label>Dòng thông báo bảo mật/uy tín:</label>
+            <input type="text" id="ownerSecure" placeholder="Ví dụ: 🔒 100% Seguro • Verificado">
+        </div>
+        <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Thay Đổi Thông Tin Bio</button>
     </div>
 
-    <hr style="margin: 20px 0; border:0; border-top:1px solid #eee;">
-
-    <div class="form-group">
-        <label>Danh mục sản phẩm:</label>
-        <select id="pCategory">
-            <option value="hot">🔥 Hot Sale / Mais Vendidos</option>
-            <option value="util">💧 Utilidades do Dia a Dia</option>
-            <option value="tech">⌚ Eletrônicos & Smartwatch</option>
-        </select>
+    <!-- PHẦN 2: THÊM SẢN PHẨM -->
+    <div class="section-box">
+        <h3>📦 Thêm Sản Phẩm Mới</h3>
+        <div class="form-group">
+            <label>Danh mục sản phẩm:</label>
+            <select id="pCategory">
+                <option value="hot">🔥 Hot Sale / Mais Vendidos</option>
+                <option value="util">💧 Utilidades do Dia a Dia</option>
+                <option value="tech">⌚ Eletrônicos & Smartwatch</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Tên sản phẩm:</label>
+            <input type="text" id="pTitle" placeholder="Ví dụ: Copo Térmico Inox 1.2L">
+        </div>
+        <div class="form-group">
+            <label>Link hình ảnh sản phẩm (URL ảnh):</label>
+            <input type="text" id="pImage" placeholder="https://images.unsplash.com/...">
+        </div>
+        <div class="form-group">
+            <label>Link mua hàng (Affiliate Link):</label>
+            <input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/e/...">
+        </div>
+        <div class="form-group">
+            <label>Giá hiện tại (Main Price):</label>
+            <input type="text" id="pMainPrice" placeholder="R$ 39,90">
+        </div>
+        <div class="form-group">
+            <label>Giá gốc & Nhãn giảm giá:</label>
+            <input type="text" id="pSubPrice" placeholder="R$ 120,00" style="margin-bottom:5px;">
+            <input type="text" id="pBadge" placeholder="Nhãn (VD: 70% OFF)">
+        </div>
+        <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Lên Mây</button>
     </div>
 
-    <div class="form-group">
-        <label>Tên sản phẩm:</label>
-        <input type="text" id="pTitle" placeholder="Ví dụ: Copo Térmico Inox 1.2L">
-    </div>
+    <div id="loadingText" class="loading">Đang đồng bộ dữ liệu với mây, vui lòng đợi...</div>
 
-    <div class="form-group">
-        <label>Link hình ảnh sản phẩm (URL ảnh):</label>
-        <input type="text" id="pImage" placeholder="https://images.unsplash.com/...">
-    </div>
-
-    <div class="form-group">
-        <label>Link mua hàng (Affiliate Link):</label>
-        <input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/e/...">
-    </div>
-
-    <div class="form-group">
-        <label>Giá hiện tại (Main Price):</label>
-        <input type="text" id="pMainPrice" placeholder="R$ 39,90">
-    </div>
-
-    <div class="form-group">
-        <label>Giá gốc & Nhãn giảm giá:</label>
-        <input type="text" id="pSubPrice" placeholder="R$ 120,00" style="margin-bottom:5px;">
-        <input type="text" id="pBadge" placeholder="Nhãn (VD: 70% OFF)">
-    </div>
-
-    <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Mới Lên Mây</button>
-    <div id="loadingText" class="loading">Đang đồng bộ dữ liệu, vui lòng đợi...</div>
-
-    <div class="admin-list">
-        <h3>📋 Danh sách sản phẩm trên mây (Bấm xóa để gỡ bỏ):</h3>
-        <div id="currentProductsList" style="margin-top: 10px;">Đang tải danh sách...</div>
+    <div style="margin-top: 20px;">
+        <h3>📋 Danh sách sản phẩm hiện tại trên mây:</h3>
+        <div id="currentProductsList" style="margin-top: 10px;">Đang tải dữ liệu...</div>
     </div>
 </div>
 
 <script>
-    const ADMIN_PASS = "123456"; // Mật khẩu quản trị của bạn
+    const ADMIN_PASS = "123456"; // Mật khẩu quản trị
     const BIN_ID = "6abf812cffd5d16053458888";
-    const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq"; // (Hãy thay bằng Master Key thật của bạn từ JSONBin)
+    const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
 
     let enteredPass = prompt("Nhập mật khẩu quản trị (Mặc định: 123456):");
     if (enteredPass !== ADMIN_PASS) {
@@ -91,30 +102,40 @@
         throw new Error("Unauthorized");
     }
 
-    let cloudProducts = [];
+    let cloudData = { profile: {}, products: [] };
 
-    // Tải danh sách sản phẩm hiện có từ mây khi vừa mở trang
     async function loadAdminData() {
         try {
             let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
                 headers: { 'X-Master-Key': MASTER_KEY }
             });
             let data = await res.json();
-            cloudProducts = data.record.products || [];
+            
+            // Nếu bin trống hoặc chưa có cấu trúc chuẩn, tự động gán mặc định
+            cloudData = data.record.products ? data.record : { 
+                profile: { name: "Achadinhos do Brasil 🇧🇷", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80", secure: "🔒 100% Seguro • Verificado" },
+                products: [] 
+            };
+
+            // Đưa dữ liệu profile lên form
+            document.getElementById('ownerName').value = cloudData.profile.name || "";
+            document.getElementById('ownerAvatar').value = cloudData.profile.avatar || "";
+            document.getElementById('ownerSecure').value = cloudData.profile.secure || "";
+
             renderAdminList();
         } catch (err) {
-            document.getElementById('currentProductsList').innerHTML = "Lỗi tải dữ liệu từ mây. Hãy kiểm tra lại Master Key trong code.";
+            document.getElementById('currentProductsList').innerHTML = "Lỗi kết nối tới kho mây JSONBin.";
         }
     }
 
     function renderAdminList() {
         const listDiv = document.getElementById('currentProductsList');
         listDiv.innerHTML = '';
-        if (cloudProducts.length === 0) {
-            listDiv.innerHTML = "<p style='color:#666;'>Chưa có sản phẩm nào.</p>";
+        if (!cloudData.products || cloudData.products.length === 0) {
+            listDiv.innerHTML = "<p style='color:#666;'>Chưa có sản phẩm nào trên mây.</p>";
             return;
         }
-        cloudProducts.forEach((p, index) => {
+        cloudData.products.forEach((p, index) => {
             listDiv.innerHTML += `
                 <div class="admin-item">
                     <span><b>[${p.category.toUpperCase()}]</b> ${p.title} (${p.mainPrice})</span>
@@ -122,6 +143,15 @@
                 </div>
             `;
         });
+    }
+
+    async function updateProfile() {
+        cloudData.profile = {
+            name: document.getElementById('ownerName').value,
+            avatar: document.getElementById('ownerAvatar').value,
+            secure: document.getElementById('ownerSecure').value
+        };
+        await saveToCloud("Đã cập nhật thông tin Bio thành công!");
     }
 
     async function addNewProduct() {
@@ -143,10 +173,11 @@
             return;
         }
 
-        cloudProducts.push(newItem);
+        if(!cloudData.products) cloudData.products = [];
+        cloudData.products.push(newItem);
         await saveToCloud("Thêm sản phẩm thành công!");
         
-        // Reset form
+        // Reset form sản phẩm
         document.getElementById('pTitle').value = '';
         document.getElementById('pImage').value = '';
         document.getElementById('pLink').value = '';
@@ -157,7 +188,7 @@
 
     async function deleteProduct(index) {
         if(!confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
-        cloudProducts.splice(index, 1);
+        cloudData.products.splice(index, 1);
         await saveToCloud("Đã xóa sản phẩm thành công!");
     }
 
@@ -170,14 +201,14 @@
                     'Content-Type': 'application/json',
                     'X-Master-Key': MASTER_KEY
                 },
-                body: JSON.stringify({ products: cloudProducts })
+                body: JSON.stringify(cloudData)
             });
 
             if(updateRes.ok) {
                 alert(successMsg);
                 renderAdminList();
             } else {
-                alert("Lỗi lưu dữ liệu. Hãy kiểm tra lại Master Key!");
+                alert("Lỗi lưu dữ liệu lên mây.");
             }
         } catch (err) {
             alert("Lỗi kết nối mạng.");
