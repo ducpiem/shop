@@ -58,7 +58,7 @@
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; flex-grow: 1; }
         .product-card { 
-            background: rgba(26, 29, 41, 0.9); border-radius: 12px; overflow: hidden; text-decoration: none; 
+            background: rgba(26, 29, 41, 0.9); border-radius: 12px; overflow: hidden; 
             display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.08);
             box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: 0.3s; position: relative;
         }
@@ -76,15 +76,25 @@
         .rating-sold { font-size: 11px; color: #a4b0be; margin-bottom: 4px; display: flex; align-items: center; gap: 3px; }
         .star-icon { color: #f39c12; }
 
-        .price-main { font-size: 18px; font-weight: 950; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 1px; letter-spacing: 0.3px; }
+        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px; }
+        .price-main { font-size: 17px; font-weight: 950; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); letter-spacing: 0.3px; }
+        
+        /* NÚT COPY LINK ICON */
+        .copy-link-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 12px; }
+        .copy-link-btn:hover { background: #2ed573; border-color: #2ed573; transform: scale(1.1); box-shadow: 0 0 10px rgba(46, 213, 115, 0.5); }
+
         .price-sub { font-size: 11px; color: #ff6b81; text-decoration: line-through; font-weight: 700; margin-bottom: 4px; }
         .shipping-tag { font-size: 10px; color: #2ed573; font-weight: bold; margin-bottom: 8px; }
 
-        .buy-btn { background: linear-gradient(135deg, #ff4757, #ff3838); color: white; text-align: center; padding: 11px 0; border-radius: 8px; font-size: 13px; font-weight: 950; letter-spacing: 0.8px; margin-top: auto; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5); animation: pulseGlow 1.8s infinite; }
+        .buy-btn { background: linear-gradient(135deg, #ff4757, #ff3838); color: white; text-align: center; padding: 10px 0; border-radius: 8px; font-size: 12px; font-weight: 950; letter-spacing: 0.8px; margin-top: auto; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5); display: block; text-decoration: none; animation: pulseGlow 1.8s infinite; }
         @keyframes pulseGlow { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); } 50% { transform: scale(1.03); box-shadow: 0 0 16px 5px rgba(255, 71, 87, 0.5); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); } }
 
         .footer { text-align: center; padding: 25px 15px 10px 15px; font-size: 11px; color: #747d8c; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 30px; }
         
+        /* Toast thông báo copy */
+        #copyToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px); background: #2ed573; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 20px; font-size: 13px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 9999; }
+        #copyToast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
         .fake-sale {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); 
             width: 90%; max-width: 380px; background: rgba(22, 24, 34, 0.95); backdrop-filter: blur(10px);
@@ -144,6 +154,9 @@
     <div class="footer" id="footerCopyright">© 2026 Achadinhos. All Rights Reserved.</div>
 </div>
 
+<!-- Toast thông báo đã copy link -->
+<div id="copyToast">Đã sao chép link Affiliate! ✔️</div>
+
 <div id="fakeSalePopup" class="fake-sale">
     <img id="fsImg" src="" alt="Sản phẩm">
     <div class="fs-info">
@@ -161,11 +174,11 @@
     let activeCategory = 'all';
 
     const translations = {
-        vi: { all: "🔥 Tất cả", discount: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", shipping: "⚡ Miễn phí vận chuyển" },
-        pt: { all: "🔥 Todos", discount: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", shipping: "⚡ Frete Grátis" },
-        en: { all: "🔥 All Items", discount: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", shipping: "⚡ Free Shipping" },
-        fr: { all: "🔥 Tous", discount: "⚡ 50%+ Solde", freeship: "💧 Livraison", under10: "💲 Moins de $10", shipping: "⚡ Livraison Gratuite" },
-        es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis" }
+        vi: { all: "🔥 Tất cả", discount: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
+        pt: { all: "🔥 Todos", discount: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
+        en: { all: "🔥 All Items", discount: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
+        fr: { all: "🔥 Tous", discount: "⚡ 50%+ Solde", freeship: "💧 Livraison", under10: "💲 Moins de $10", shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
+        es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
     };
 
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
@@ -215,7 +228,6 @@
         const container = document.getElementById('socialLinksContainer');
         container.innerHTML = '';
         
-        // Chỉ vẽ ra (hiển thị) mạng xã hội nào có link và trạng thái = Bật (true)
         if(s.fb && s.showFb !== false) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>`;
         if(s.tt && s.showTt !== false) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
         if(s.ig && s.showIg !== false) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
@@ -226,6 +238,20 @@
         activeCategory = cat;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active'); renderGrid();
+    }
+
+    // Hàm thực hiện copy link khi bấm vào nút icon
+    function copyAffiliateLink(event, url) {
+        event.preventDefault(); // Ngăn việc mở link sản phẩm khi bấm vào nút copy
+        event.stopPropagation();
+        
+        navigator.clipboard.writeText(url).then(() => {
+            let toast = document.getElementById('copyToast');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }).catch(err => {
+            alert("Không thể sao chép liên kết!");
+        });
     }
 
     function renderGrid() {
@@ -249,24 +275,34 @@
             let pinHtml = p.pinned ? `<span class="pin-badge">📌 HOT</span>` : '';
             let cardClass = p.pinned ? "product-card pinned" : "product-card";
             
+            // Mã hóa link an toàn để đưa vào hàm JS
+            let safeLink = p.link.replace(/'/g, "\\'");
+            
             gridContainer.innerHTML += `
-                <a href="${p.link}" target="_blank" class="${cardClass}">
-                    <div class="img-wrap">
-                        <img class="product-img" src="${p.image}" alt="Product" loading="lazy">
-                        <span class="badge-discount">${p.badge || 'SALE'}</span>
-                        ${pinHtml}
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${p.title}</div>
-                        <div class="rating-sold">
-                            <span class="star-icon">★</span> <b>${p.rating || '4.9'}</b> (${p.sold || '2k+'})
+                <div class="${cardClass}">
+                    <a href="${p.link}" target="_blank" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; flex-grow:1;">
+                        <div class="img-wrap">
+                            <img class="product-img" src="${p.image}" alt="Product" loading="lazy">
+                            <span class="badge-discount">${p.badge || 'SALE'}</span>
+                            ${pinHtml}
                         </div>
-                        <div class="price-main">US $${p.mainPrice}</div>
-                        <div class="price-sub">US $${p.subPrice}</div>
-                        <div class="shipping-tag">${t.shipping}</div>
-                        <div class="buy-btn">🛒</div>
-                    </div>
-                </a>
+                        <div class="product-info">
+                            <div class="product-title">${p.title}</div>
+                            <div class="rating-sold">
+                                <span class="star-icon">★</span> <b>${p.rating || '4.9'}</b> (${p.sold || '2k+'})
+                            </div>
+                            <div class="price-row">
+                                <div class="price-main">US $${p.mainPrice}</div>
+                                <button class="copy-link-btn" onclick="copyAffiliateLink(event, '${safeLink}')" title="Copy Link Affiliate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="price-sub">US $${p.subPrice}</div>
+                            <div class="shipping-tag">${t.shipping}</div>
+                            <a href="${p.link}" target="_blank" class="buy-btn">${t.buy}</a>
+                        </div>
+                    </a>
+                </div>
             `;
         });
     }
