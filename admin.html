@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin - Quản Trị Hệ Thống Bio</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/ducpiem/ducpm/refs/heads/ducpiem/Dlogo-removebg-preview.png">
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #0c0d14; color: #fff; padding: 20px; display: flex; justify-content: center; }
@@ -21,10 +21,15 @@
         .btn:hover { background: #ff3838; }
         .btn-profile { background: #2ed573; color: #000; }
         .btn-profile:hover { background: #26af5f; }
+        
         .loading { text-align: center; color: #70a1ff; font-weight: bold; margin-top: 10px; display: none; }
         
         .admin-item { display: flex; justify-content: space-between; align-items: center; background: #12141d; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border: 1px solid #262938; }
+        .btn-action-group { display: flex; gap: 6px; }
+        .btn-edit { background: #f39c12; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-edit:hover { background: #e67e22; }
         .btn-del { background: #e53935; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-del:hover { background: #c62828; }
     </style>
 </head>
 <body>
@@ -38,39 +43,39 @@
         <div class="form-group"><label>Link ảnh đại diện (Avatar URL):</label><input type="text" id="ownerAvatar" placeholder="https://..."></div>
         <div class="form-group"><label>Thông báo uy tín (Dưới tên):</label><input type="text" id="ownerSecure" placeholder="🔒 100% Seguro • Verificado"></div>
         <div class="form-group"><label>Thông tin Copyright (Dưới đáy trang):</label><input type="text" id="copyrightTxt" placeholder="© 2026 Achadinhos. All Rights Reserved."></div>
-        <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio & Chân Trang</button>
+        <button class="btn btn-profile" onclick="updateProfile()">💾 Lưu Cài Đặt Bio</button>
     </div>
 
     <div class="section-box">
         <h3>🌐 Cấu hình Mạng Xã Hội</h3>
         <div class="row">
-            <div class="form-group"><label style="color:#1877F2;">📘 Facebook URL:</label><input type="text" id="socFb" placeholder="https://facebook.com/..."></div>
-            <div class="form-group"><label style="color:#00f2fe;">🎵 TikTok URL:</label><input type="text" id="socTt" placeholder="https://tiktok.com/@..."></div>
+            <div class="form-group"><label style="color:#1877F2;">📘 Facebook URL:</label><input type="text" id="socFb"></div>
+            <div class="form-group"><label style="color:#00f2fe;">🎵 TikTok URL:</label><input type="text" id="socTt"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label style="color:#e84393;">📸 Instagram URL:</label><input type="text" id="socIg" placeholder="https://instagram.com/..."></div>
-            <div class="form-group"><label style="color:#ff0000;">▶️ YouTube URL:</label><input type="text" id="socYt" placeholder="https://youtube.com/..."></div>
+            <div class="form-group"><label style="color:#e84393;">📸 Instagram URL:</label><input type="text" id="socIg"></div>
+            <div class="form-group"><label style="color:#ff0000;">▶️ YouTube URL:</label><input type="text" id="socYt"></div>
         </div>
         <button class="btn btn-profile" onclick="updateSocials()" style="background:#3742fa; color:#fff;">💾 Lưu Mạng Xã Hội</button>
     </div>
 
-    <div class="section-box">
-        <h3>📦 Thêm Sản Phẩm Mới (Tự động lên đầu trang)</h3>
+    <div class="section-box" id="productFormSection">
+        <h3 id="formTitle">📦 Thêm / Sửa Sản Phẩm</h3>
         <div class="form-group">
-            <label>Danh mục (Hệ thống sẽ tự phân loại theo Giảm giá & Giá tiền):</label>
-            <select id="pCategory">
-                <option value="hot">🔥 Sản phẩm chung / Nổi bật</option>
-            </select>
+            <label>Danh mục (Tự động phân loại theo Giá / Sale):</label>
+            <select id="pCategory"><option value="hot">🔥 Sản phẩm chung</option></select>
         </div>
-        <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle" placeholder="Rubber Gym WOD Grip Sapo"></div>
+        <div class="form-group"><label>Tên sản phẩm:</label><input type="text" id="pTitle" placeholder="Nhập tên sản phẩm..."></div>
         <div class="row">
-            <div class="form-group"><label>Giá hiện tại (Chỉ nhập số, VD: 9.99):</label><input type="text" id="pMainPrice" placeholder="9.99" oninput="autoCalculateBadge()"></div>
-            <div class="form-group"><label>Giá gốc (Chỉ nhập số, VD: 35.00):</label><input type="text" id="pSubPrice" placeholder="35.00" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá hiện tại (Số, VD: 9.99):</label><input type="text" id="pMainPrice" oninput="autoCalculateBadge()"></div>
+            <div class="form-group"><label>Giá gốc (Số, VD: 35.00):</label><input type="text" id="pSubPrice" oninput="autoCalculateBadge()"></div>
         </div>
-        <div class="form-group"><label>Nhãn giảm giá (Tự động tính %):</label><input type="text" id="pBadge" placeholder="VD: 71% OFF"></div>
-        <div class="form-group"><label>Link hình ảnh sản phẩm (URL):</label><input type="text" id="pImage" placeholder="https://..."></div>
-        <div class="form-group"><label>Link mua hàng (Affiliate Link):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/..."></div>
-        <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Lên Mây</button>
+        <div class="form-group"><label>Nhãn giảm giá:</label><input type="text" id="pBadge" placeholder="VD: 71% OFF"></div>
+        <div class="form-group"><label>Link hình ảnh sản phẩm:</label><input type="text" id="pImage" placeholder="https://..."></div>
+        <div class="form-group"><label>Link mua hàng (Affiliate):</label><input type="text" id="pLink" placeholder="https://s.click.aliexpress.com/..."></div>
+        
+        <button class="btn" id="btnSubmitProduct" onclick="saveProductAction()">➕ Thêm Sản Phẩm Lên Mây</button>
+        <button class="btn" id="btnCancelEdit" onclick="cancelEdit()" style="background:#747d8c; display:none;">❌ Hủy Chỉnh Sửa (Quay Về Thêm Mới)</button>
     </div>
 
     <div id="loadingText" class="loading">Đang đồng bộ dữ liệu với mây...</div>
@@ -88,23 +93,19 @@
 
     let enteredPass = prompt("Nhập mật khẩu quản trị (Mặc định: 123456):");
     if (enteredPass !== ADMIN_PASS) {
-        alert("Sai mật khẩu!");
         document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px; color:red;'>Truy cập bị từ chối ❌</h2>";
         throw new Error("Unauthorized");
     }
 
     let cloudData = { profile: {}, socials: {}, products: [] };
+    let editIndex = -1; // Biến theo dõi trạng thái Sửa hay Thêm mới (-1 là Thêm Mới)
 
     async function loadAdminData() {
         try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                headers: { 'X-Master-Key': MASTER_KEY }
-            });
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
             cloudData = data.record.products ? data.record : { 
-                profile: { name: "ducpm", avatar: "", secure: "🔒 100% Seguro • Verificado", copyright: "© 2026 Achadinhos. All Rights Reserved." },
-                socials: { fb: "", tt: "", ig: "", yt: "" },
-                products: [] 
+                profile: {}, socials: {}, products: [] 
             };
 
             document.getElementById('ownerName').value = cloudData.profile.name || "";
@@ -128,7 +129,6 @@
     function autoCalculateBadge() {
         let mainNum = parseFloat(document.getElementById('pMainPrice').value.replace(',', '.'));
         let subNum = parseFloat(document.getElementById('pSubPrice').value.replace(',', '.'));
-
         if(mainNum && subNum && subNum > mainNum) {
             let discount = Math.round(((subNum - mainNum) / subNum) * 100);
             document.getElementById('pBadge').value = `${discount}% OFF`;
@@ -146,12 +146,113 @@
             listDiv.innerHTML += `
                 <div class="admin-item">
                     <span><b>[Sản phẩm]</b> ${p.title} (US $${p.mainPrice})</span>
-                    <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
+                    <div class="btn-action-group">
+                        <button class="btn-edit" onclick="startEdit(${index})">✏️ Sửa</button>
+                        <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
+                    </div>
                 </div>
             `;
         });
     }
 
+    // --- CÁC HÀM XỬ LÝ SỬA / THÊM ---
+    function startEdit(index) {
+        editIndex = index;
+        let p = cloudData.products[index];
+        
+        // Đẩy dữ liệu lên form
+        document.getElementById('pTitle').value = p.title || '';
+        document.getElementById('pMainPrice').value = p.mainPrice || '';
+        document.getElementById('pSubPrice').value = p.subPrice || '';
+        document.getElementById('pBadge').value = p.badge || '';
+        document.getElementById('pImage').value = p.image || '';
+        document.getElementById('pLink').value = p.link || '';
+
+        // Đổi giao diện form sang chế độ Sửa
+        document.getElementById('formTitle').innerText = "✏️ Đang Chỉnh Sửa Sản Phẩm";
+        document.getElementById('formTitle').style.color = "#f39c12";
+        let btn = document.getElementById('btnSubmitProduct');
+        btn.innerText = "💾 Lưu Thay Đổi Sản Phẩm";
+        btn.style.background = "#f39c12";
+        
+        document.getElementById('btnCancelEdit').style.display = 'block';
+
+        // Cuộn màn hình lên chỗ form sửa
+        document.getElementById('productFormSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function cancelEdit() {
+        editIndex = -1; // Reset về trạng thái Thêm mới
+        
+        // Xóa trắng form
+        document.getElementById('pTitle').value = '';
+        document.getElementById('pMainPrice').value = '';
+        document.getElementById('pSubPrice').value = '';
+        document.getElementById('pBadge').value = '';
+        document.getElementById('pImage').value = '';
+        document.getElementById('pLink').value = '';
+
+        // Đổi lại giao diện
+        document.getElementById('formTitle').innerText = "📦 Thêm Sản Phẩm Mới";
+        document.getElementById('formTitle').style.color = "#a4b0be";
+        
+        let btn = document.getElementById('btnSubmitProduct');
+        btn.innerText = "➕ Thêm Sản Phẩm Lên Mây";
+        btn.style.background = "#ff4757";
+        
+        document.getElementById('btnCancelEdit').style.display = 'none';
+    }
+
+    async function saveProductAction() {
+        let rawMain = document.getElementById('pMainPrice').value.trim();
+        let rawSub = document.getElementById('pSubPrice').value.trim();
+
+        if(!document.getElementById('pTitle').value || !document.getElementById('pLink').value) {
+            alert("Vui lòng điền tên và link sản phẩm!");
+            return;
+        }
+
+        if(!cloudData.products) cloudData.products = [];
+
+        if(editIndex > -1) {
+            // Chế độ Sửa (Cập nhật ghi đè dữ liệu cũ)
+            cloudData.products[editIndex].title = document.getElementById('pTitle').value;
+            cloudData.products[editIndex].mainPrice = rawMain;
+            cloudData.products[editIndex].subPrice = rawSub;
+            cloudData.products[editIndex].badge = document.getElementById('pBadge').value || "SALE";
+            cloudData.products[editIndex].image = document.getElementById('pImage').value;
+            cloudData.products[editIndex].link = document.getElementById('pLink').value;
+            
+            await saveToCloud("Đã cập nhật sản phẩm thành công!");
+            cancelEdit(); // Reset form về chế độ thêm
+        } else {
+            // Chế độ Thêm mới (Đẩy lên đầu mảng)
+            const newItem = {
+                id: Date.now(),
+                category: document.getElementById('pCategory').value,
+                title: document.getElementById('pTitle').value,
+                image: document.getElementById('pImage').value,
+                link: document.getElementById('pLink').value,
+                mainPrice: rawMain,
+                subPrice: rawSub,
+                badge: document.getElementById('pBadge').value || "SALE",
+                rating: "4.9",
+                sold: "2k+"
+            };
+            cloudData.products.unshift(newItem);
+            await saveToCloud("Thêm sản phẩm thành công và đã đẩy lên đầu!");
+            cancelEdit();
+        }
+    }
+
+    async function deleteProduct(index) {
+        if(!confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
+        cloudData.products.splice(index, 1);
+        if(editIndex === index) cancelEdit(); // Nếu đang sửa mà bấm xóa thì reset form
+        await saveToCloud("Đã xóa sản phẩm thành công!");
+    }
+
+    // --- CÁC HÀM CẬP NHẬT CƠ BẢN ---
     async function updateProfile() {
         if(!cloudData.profile) cloudData.profile = {};
         cloudData.profile.name = document.getElementById('ownerName').value;
@@ -171,70 +272,19 @@
         await saveToCloud("Đã lưu mạng xã hội thành công!");
     }
 
-    async function addNewProduct() {
-        let rawMain = document.getElementById('pMainPrice').value.trim();
-        let rawSub = document.getElementById('pSubPrice').value.trim();
-
-        const newItem = {
-            id: Date.now(),
-            category: document.getElementById('pCategory').value,
-            title: document.getElementById('pTitle').value,
-            image: document.getElementById('pImage').value,
-            link: document.getElementById('pLink').value,
-            mainPrice: rawMain,
-            subPrice: rawSub,
-            badge: document.getElementById('pBadge').value || "SALE",
-            rating: "4.9",
-            sold: "2k+"
-        };
-
-        if(!newItem.title || !newItem.link) {
-            alert("Vui lòng điền tên và link sản phẩm!");
-            return;
-        }
-
-        if(!cloudData.products) cloudData.products = [];
-        // Đưa sản phẩm mới lên đầu mảng để khi render nó nằm trên cùng
-        cloudData.products.unshift(newItem);
-        await saveToCloud("Thêm sản phẩm thành công và đã đẩy lên đầu!");
-        
-        document.getElementById('pTitle').value = '';
-        document.getElementById('pImage').value = '';
-        document.getElementById('pLink').value = '';
-        document.getElementById('pMainPrice').value = '';
-        document.getElementById('pSubPrice').value = '';
-        document.getElementById('pBadge').value = '';
-    }
-
-    async function deleteProduct(index) {
-        if(!confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
-        cloudData.products.splice(index, 1);
-        await saveToCloud("Đã xóa sản phẩm thành công!");
-    }
-
     async function saveToCloud(successMsg) {
         document.getElementById('loadingText').style.display = 'block';
         try {
             let updateRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': MASTER_KEY
-                },
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
                 body: JSON.stringify(cloudData)
             });
-
             if(updateRes.ok) {
                 alert(successMsg);
                 renderAdminList();
-            } else {
-                alert("Lỗi lưu dữ liệu lên mây.");
-            }
-        } catch (err) {
-            alert("Lỗi kết nối mạng.");
-        } finally {
-            document.getElementById('loadingText').style.display = 'none';
-        }
+            } else { alert("Lỗi lưu dữ liệu lên mây."); }
+        } catch (err) { alert("Lỗi kết nối mạng."); } finally { document.getElementById('loadingText').style.display = 'none'; }
     }
 
     loadAdminData();
