@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achadinhos do Brasil - AliExpress Exclusive Deals</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/ducpiem/ducpm/refs/heads/ducpiem/Dlogo-removebg-preview.png">
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         :root { --primary-red: #ff4757; --ali-red: #ff6b81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -46,14 +46,9 @@
         .owner-name { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
         .secure-text { font-size: 12px; color: #2ed573; font-weight: 700; background: rgba(46,213,115,0.12); display: inline-block; padding: 5px 14px; border-radius: 15px; border: 1px solid rgba(46,213,115,0.3); }
 
-        .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 15px 0; }
+        .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 15px 0; transition: 0.3s; }
         .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.2s; }
-        .social-icon.fb:hover { background: #1877F2; box-shadow: 0 0 15px #1877F2; transform: translateY(-3px); }
-        .social-icon.tt:hover { background: #00f2fe; color: #000; box-shadow: 0 0 15px #00f2fe; transform: translateY(-3px); }
-        .social-icon.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); box-shadow: 0 0 15px #d6249f; transform: translateY(-3px); }
-        .social-icon.yt:hover { background: #FF0000; box-shadow: 0 0 15px #FF0000; transform: translateY(-3px); }
-
-        /* DẢI CHỮ CHẠY SONG NGỮ (BRAZIL & ANH) - CHỮ TRẮNG SÁNG NEON */
+        
         .ali-marquee-bar { background: rgba(255, 71, 87, 0.12); border-top: 1px solid rgba(255,71,87,0.3); border-bottom: 1px solid rgba(255,71,87,0.3); padding: 7px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
         .ali-marquee-bar marquee { font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,71,87,0.8); letter-spacing: 0.8px; text-transform: uppercase; }
 
@@ -62,17 +57,19 @@
         .tab-btn.active { background: var(--primary-red); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(255,71,87,0.4); }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; flex-grow: 1; }
-        
         .product-card { 
             background: rgba(26, 29, 41, 0.9); border-radius: 12px; overflow: hidden; text-decoration: none; 
             display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.08);
             box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: 0.3s; position: relative;
         }
-        .product-card:hover { transform: translateY(-4px); border-color: rgba(255,71,87,0.5); box-shadow: 0 10px 25px rgba(255, 71, 87, 0.25); }
+        
+        /* Hiệu ứng viền vàng cho sản phẩm được ghim */
+        .product-card.pinned { border: 1px solid rgba(241, 196, 15, 0.5); box-shadow: 0 0 15px rgba(241, 196, 15, 0.2); }
+        .pin-badge { position: absolute; top: 8px; right: 8px; background: #f1c40f; color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10; }
 
         .img-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
         .product-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
-        .badge-discount { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff4757, #ff3838); color: white; font-size: 11px; font-weight: 900; padding: 5px 9px; border-radius: 6px; text-transform: uppercase; box-shadow: 0 3px 10px rgba(255,71,87,0.6); }
+        .badge-discount { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff4757, #ff3838); color: white; font-size: 11px; font-weight: 900; padding: 5px 9px; border-radius: 6px; text-transform: uppercase; box-shadow: 0 3px 10px rgba(255,71,87,0.6); z-index: 10; }
 
         .product-info { padding: 8px 10px 10px 10px; display: flex; flex-direction: column; flex-grow: 1; }
         .product-title { font-size: 12px; color: #f1f2f6; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; line-height: 1.25; }
@@ -84,19 +81,26 @@
         .price-sub { font-size: 11px; color: #ff6b81; text-decoration: line-through; font-weight: 700; margin-bottom: 4px; }
         .shipping-tag { font-size: 10px; color: #2ed573; font-weight: bold; margin-bottom: 8px; }
 
-        .buy-btn { 
-            background: linear-gradient(135deg, #ff4757, #ff3838); color: white; text-align: center; 
-            padding: 11px 0; border-radius: 8px; font-size: 13px; font-weight: 950; letter-spacing: 0.8px;
-            margin-top: auto; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5); animation: pulseGlow 1.8s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
-            50% { transform: scale(1.03); box-shadow: 0 0 16px 5px rgba(255, 71, 87, 0.5); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
-        }
+        .buy-btn { background: linear-gradient(135deg, #ff4757, #ff3838); color: white; text-align: center; padding: 11px 0; border-radius: 8px; font-size: 13px; font-weight: 950; letter-spacing: 0.8px; margin-top: auto; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5); animation: pulseGlow 1.8s infinite; }
+        @keyframes pulseGlow { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); } 50% { transform: scale(1.03); box-shadow: 0 0 16px 5px rgba(255, 71, 87, 0.5); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); } }
 
         .footer { text-align: center; padding: 25px 15px 10px 15px; font-size: 11px; color: #747d8c; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 30px; }
-        .loading-msg { grid-column: span 2; text-align: center; padding: 40px; color: #a4b0be; font-weight: bold; }
+        
+        /* CSS CHO FAKE SALE POPUP CHIM MỒI */
+        .fake-sale {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); 
+            width: 90%; max-width: 380px; background: rgba(22, 24, 34, 0.95); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; 
+            display: flex; gap: 12px; align-items: center; opacity: 0; visibility: hidden; 
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1000; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,71,87,0.2);
+        }
+        .fake-sale.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+        .fake-sale img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .fs-info { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
+        .fs-name { font-size: 11px; color: #a4b0be; margin-bottom: 2px; }
+        .fs-title { font-size: 12px; color: #fff; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+        .fs-time { font-size: 10px; color: #2ed573; font-weight: bold; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -123,7 +127,6 @@
         <div class="social-links" id="socialLinksContainer"></div>
     </div>
 
-    <!-- DẢI CHỮ CHẠY SONG NGỮ (PORTUGUES & ENGLISH) CHỮ TRẮNG SÁNG NEON -->
     <div class="ali-marquee-bar">
         <marquee scrollamount="3.5">
             🔥 Achadinhos Exclusivos AliExpress • Melhores Ofertas do Brasil • Super Descontos & Frete Grátis 🇧🇷 &nbsp;&nbsp;&bull;&nbsp;&nbsp; 
@@ -131,7 +134,6 @@
         </marquee>
     </div>
 
-    <!-- BỘ DANH MỤC MỚI THEO YÊU CẦU -->
     <div class="category-tabs">
         <button class="tab-btn active" onclick="filterCategory('all', this)" id="tabAll">🔥 Tất cả</button>
         <button class="tab-btn" onclick="filterCategory('discount50', this)" id="tabDiscount">⚡ Giảm 50%+</button>
@@ -139,12 +141,18 @@
         <button class="tab-btn" onclick="filterCategory('under10', this)" id="tabUnder10">💲 Dưới $10</button>
     </div>
 
-    <div id="productGrid" class="product-grid">
-        <div class="loading-msg" id="loadText">Carregando ofertas da nuvem... 🔄</div>
-    </div>
+    <div id="productGrid" class="product-grid"></div>
 
-    <div class="footer" id="footerCopyright">
-        © 2026 Achadinhos. All Rights Reserved.
+    <div class="footer" id="footerCopyright">© 2026 Achadinhos. All Rights Reserved.</div>
+</div>
+
+<!-- FAKE SALE POPUP CHIM MỒI -->
+<div id="fakeSalePopup" class="fake-sale">
+    <img id="fsImg" src="" alt="Sản phẩm">
+    <div class="fs-info">
+        <div class="fs-name"><span id="fsFlag"></span> <span id="fsBuyer"></span></div>
+        <div class="fs-title" id="fsTitle"></div>
+        <div class="fs-time" id="fsTimeTxt"></div>
     </div>
 </div>
 
@@ -156,153 +164,153 @@
     let activeCategory = 'all';
 
     const translations = {
-        vi: { all: "🔥 Tất cả", discount: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒", loading: "Đang tải ưu đãi từ mây... 🔄", empty: "Không tìm thấy sản phẩm nào." },
-        pt: { all: "🔥 Todos", discount: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒", loading: "Carregando ofertas da nuvem... 🔄", empty: "Nenhum produto encontrado." },
-        en: { all: "🔥 All Items", discount: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒", loading: "Loading offers from cloud... 🔄", empty: "No products found." },
-        fr: { all: "🔥 Tous", discount: "⚡ 50%+ Solde", freeship: "💧 Livraison", under10: "💲 Moins de $10", shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒", loading: "Chargement depuis le cloud... 🔄", empty: "Aucun produit trouvé." },
-        es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒", loading: "Cargando ofertas de la nube... 🔄", empty: "No se encontraron productos." }
+        vi: { all: "🔥 Tất cả", discount: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", shipping: "⚡ Miễn phí vận chuyển" },
+        pt: { all: "🔥 Todos", discount: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", shipping: "⚡ Frete Grátis" },
+        en: { all: "🔥 All Items", discount: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", shipping: "⚡ Free Shipping" },
+        fr: { all: "🔥 Tous", discount: "⚡ 50%+ Solde", freeship: "💧 Livraison", under10: "💲 Moins de $10", shipping: "⚡ Livraison Gratuite" },
+        es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis" }
     };
 
+    // DỮ LIỆU FAKE SALE
+    const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
+    const fakeFlags = ["🇧🇷", "🇺🇸", "🇫🇷", "🇪🇸", "🇵🇹", "🇨🇴", "🇦🇷", "🇲🇽", "🇨🇱", "🇬🇧", "🇮🇹", "🇻🇳"];
+    const fakeActions = { vi: "vừa mới mua", pt: "acabou de comprar", en: "just purchased", fr: "vient d'acheter", es: "acaba de comprar" };
+    const fakeTime = { vi: "Vài giây trước ⚡", pt: "Agora mesmo ⚡", en: "Just now ⚡", fr: "À l'instant ⚡", es: "Justo ahora ⚡" };
+
     function initLanguage() {
-        let savedLang = localStorage.getItem('user_lang');
-        if(savedLang && translations[savedLang]) {
-            document.getElementById('langSelect').value = savedLang;
-        } else {
-            document.getElementById('langSelect').value = 'vi';
-            localStorage.setItem('user_lang', 'vi');
-        }
+        let savedLang = localStorage.getItem('user_lang') || 'vi';
+        document.getElementById('langSelect').value = savedLang;
     }
 
     function changeLanguage() {
-        let lang = document.getElementById('langSelect').value;
-        localStorage.setItem('user_lang', lang);
+        localStorage.setItem('user_lang', document.getElementById('langSelect').value);
         renderGrid();
     }
 
     function createSnowflakes() {
         const snowContainer = document.getElementById('snowContainer');
-        const count = 35;
-        for(let i=0; i<count; i++) {
-            let flake = document.createElement('div');
-            flake.classList.add('snowflake');
-            let size = Math.random() * 4 + 2;
-            flake.style.width = `${size}px`;
-            flake.style.height = `${size}px`;
+        for(let i=0; i<35; i++) {
+            let flake = document.createElement('div'); flake.classList.add('snowflake');
+            flake.style.width = flake.style.height = `${Math.random() * 4 + 2}px`;
             flake.style.left = `${Math.random() * 100}%`;
-            let duration = Math.random() * 8 + 6;
-            let delay = Math.random() * 5;
-            flake.style.animationDuration = `${duration}s`;
-            flake.style.animationDelay = `${delay}s`;
+            flake.style.animationDuration = `${Math.random() * 8 + 6}s`;
+            flake.style.animationDelay = `${Math.random() * 5}s`;
             snowContainer.appendChild(flake);
         }
     }
 
     async function fetchDataFromCloud() {
         try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
-                headers: { 'X-Master-Key': MASTER_KEY }
-            });
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
-            
-            let record = data.record || {};
-            globalData.products = record.products || [];
-            globalData.profile = record.profile || {};
-            globalData.socials = record.socials || {};
+            globalData = data.record || { profile: {}, socials: {}, products: [] };
             
             if(globalData.profile.name) document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
             if(globalData.profile.avatar) document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
             if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
             if(globalData.profile.copyright) document.getElementById('footerCopyright').innerText = globalData.profile.copyright;
 
-            renderSocials();
-            renderGrid();
-        } catch (err) {
-            console.error(err);
-            document.getElementById('productGrid').innerHTML = `<div class="loading-msg" style="color:#ff4757;">Erro ao carregar dados da nuvem.</div>`;
-        }
+            renderSocials(); renderGrid();
+        } catch (err) {}
     }
 
     function renderSocials() {
-        const s = globalData.socials;
+        const s = globalData.socials || {};
         const container = document.getElementById('socialLinksContainer');
         container.innerHTML = '';
+        
+        // KIỂM TRA TRẠNG THÁI ẨN / HIỆN MXH TỪ QUẢN TRỊ
+        if(globalData.profile.showSocials === false) {
+            container.style.display = 'none'; return;
+        } else {
+            container.style.display = 'flex';
+        }
 
-        if(s.fb) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>`;
-        if(s.tt) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon tt"><i class="fab fa-tiktok"></i></a>`;
-        if(s.ig) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>`;
-        if(s.yt) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon yt"><i class="fab fa-youtube"></i></a>`;
+        if(s.fb) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>`;
+        if(s.tt) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
+        if(s.ig) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
+        if(s.yt) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
     }
 
     function filterCategory(cat, btn) {
         activeCategory = cat;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderGrid();
+        btn.classList.add('active'); renderGrid();
     }
 
     function renderGrid() {
-        const lang = document.getElementById('langSelect').value;
-        const t = translations[lang];
+        const lang = document.getElementById('langSelect').value; const t = translations[lang];
+        document.getElementById('tabAll').innerText = t.all; document.getElementById('tabDiscount').innerText = t.discount;
+        document.getElementById('tabFreeship').innerText = t.freeship; document.getElementById('tabUnder10').innerText = t.under10;
 
-        document.getElementById('tabAll').innerText = t.all;
-        document.getElementById('tabDiscount').innerText = t.discount;
-        document.getElementById('tabFreeship').innerText = t.freeship;
-        document.getElementById('tabUnder10').innerText = t.under10;
-
-        const gridContainer = document.getElementById('productGrid');
-        gridContainer.innerHTML = '';
-
-        const products = globalData.products || [];
-        
-        // Lọc sản phẩm thông minh dựa trên danh mục người dùng bấm
-        let filtered = products.filter(p => {
+        const gridContainer = document.getElementById('productGrid'); gridContainer.innerHTML = '';
+        let filtered = (globalData.products || []).filter(p => {
             let badgeNum = parseInt((p.badge || "").replace(/[^\d]/g, '')) || 0;
             let mainPriceNum = parseFloat((p.mainPrice || "0").replace(/[^\d,.]/g, '').replace(',', '.')) || 0;
-
-            if (activeCategory === 'discount50') {
-                return badgeNum >= 50;
-            } else if (activeCategory === 'freeship') {
-                return true; // Mặc định tất cả đều hỗ trợ freeship theo cấu hình
-            } else if (activeCategory === 'under10') {
-                return mainPriceNum > 0 && mainPriceNum < 10;
-            }
-            return true; // 'all'
+            if (activeCategory === 'discount50') return badgeNum >= 50;
+            if (activeCategory === 'freeship') return true;
+            if (activeCategory === 'under10') return mainPriceNum > 0 && mainPriceNum < 10;
+            return true;
         });
 
-        if(filtered.length === 0) {
-            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#a4b0be; padding: 25px;">${t.empty}</p>`;
-            return;
-        }
+        // SẮP XẾP: NHỮNG SẢN PHẨM GHIM (PINNED) LÊN ĐẦU
+        filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
         filtered.forEach(p => {
-            let mainDisplay = p.mainPrice ? (p.mainPrice.startsWith("US") ? p.mainPrice : `US $${p.mainPrice}`) : "";
-            let subDisplay = p.subPrice ? (p.subPrice.startsWith("US") ? p.subPrice : `US $${p.subPrice}`) : "";
-
+            let pinHtml = p.pinned ? `<span class="pin-badge">📌 HOT</span>` : '';
+            let cardClass = p.pinned ? "product-card pinned" : "product-card";
+            
             gridContainer.innerHTML += `
-                <a href="${p.link}" target="_blank" class="product-card">
+                <a href="${p.link}" target="_blank" class="${cardClass}">
                     <div class="img-wrap">
-                        <img class="product-img" src="${p.image}" alt="${p.title}" loading="lazy">
+                        <img class="product-img" src="${p.image}" alt="Product" loading="lazy">
                         <span class="badge-discount">${p.badge || 'SALE'}</span>
+                        ${pinHtml}
                     </div>
                     <div class="product-info">
                         <div class="product-title">${p.title}</div>
                         <div class="rating-sold">
-                            <span class="star-icon">★</span> <b>${p.rating || '4.9'}</b> (${p.sold || '1k+'})
+                            <span class="star-icon">★</span> <b>${p.rating || '4.9'}</b> (${p.sold || '2k+'})
                         </div>
-                        <div class="price-main">${mainDisplay}</div>
-                        <div class="price-sub">${subDisplay}</div>
+                        <div class="price-main">US $${p.mainPrice}</div>
+                        <div class="price-sub">US $${p.subPrice}</div>
                         <div class="shipping-tag">${t.shipping}</div>
-                        <div class="buy-btn">${t.buy}</div>
+                        <div class="buy-btn">🛒</div>
                     </div>
                 </a>
             `;
         });
     }
 
+    // --- LOGIC HIỂN THỊ POPUP FAKE SALE (CHIM MỒI) ---
+    function triggerFakeSale() {
+        if(!globalData.products || globalData.products.length === 0) return;
+        const popup = document.getElementById('fakeSalePopup');
+        
+        // Bốc ngẫu nhiên 1 sản phẩm và thông tin người mua
+        const p = globalData.products[Math.floor(Math.random() * globalData.products.length)];
+        const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+        const flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
+        const lang = document.getElementById('langSelect').value;
+        
+        document.getElementById('fsImg').src = p.image || 'https://via.placeholder.com/50';
+        document.getElementById('fsFlag').innerText = flag;
+        document.getElementById('fsBuyer').innerText = `${name} ${fakeActions[lang]}`;
+        document.getElementById('fsTitle').innerText = p.title;
+        document.getElementById('fsTimeTxt').innerText = fakeTime[lang];
+        
+        // Hiện lên
+        popup.classList.add('show');
+        
+        // Ẩn đi sau 4.5 giây
+        setTimeout(() => { popup.classList.remove('show'); }, 4500);
+    }
+
+    // Chạy Popup mỗi 30 giây (30000 ms)
+    setInterval(triggerFakeSale, 30000);
+
     document.addEventListener('DOMContentLoaded', () => {
-        initLanguage();
-        createSnowflakes();
-        fetchDataFromCloud();
+        initLanguage(); createSnowflakes(); fetchDataFromCloud();
     });
 </script>
 </body>
