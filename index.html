@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life in Sketches
- do Brasil - AliExpress Exclusive Deals</title>
-    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
+    <title>Achadinhos do Brasil - AliExpress Exclusive Deals</title>
+    <link rel="icon" href="[https://img.icons8.com/color/48/shopping-bag.png](https://img.icons8.com/color/48/shopping-bag.png)">
     <style>
         :root { --primary-red: #ff4757; --ali-red: #ff6b81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -41,13 +40,17 @@
         .owner-name { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
         .secure-text { font-size: 12px; color: #2ed573; font-weight: 700; background: rgba(46,213,115,0.12); display: inline-block; padding: 5px 14px; border-radius: 15px; border: 1px solid rgba(46,213,115,0.3); }
 
+        /* MẠNG XÃ HỘI CHUẨN MÀU KHI HOVER */
         .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 15px 0; transition: 0.3s; }
-        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.2s; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.25s; }
+        .social-icon.fb:hover { background: #1877F2; border-color: #1877F2; box-shadow: 0 0 12px rgba(24, 119, 242, 0.7); transform: translateY(-3px); }
+        .social-icon.tt:hover { background: #00f2fe; color: #000; border-color: #00f2fe; box-shadow: 0 0 12px rgba(0, 242, 254, 0.7); transform: translateY(-3px); }
+        .social-icon.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #df5914 45%, #c62937 60%, #a5359b 90%); border-color: transparent; box-shadow: 0 0 12px rgba(198, 41, 55, 0.7); transform: translateY(-3px); }
+        .social-icon.yt:hover { background: #ff0000; border-color: #ff0000; box-shadow: 0 0 12px rgba(255, 0, 0, 0.7); transform: translateY(-3px); }
         
         .ali-marquee-bar { background: rgba(255, 71, 87, 0.12); border-top: 1px solid rgba(255,71,87,0.3); border-bottom: 1px solid rgba(255,71,87,0.3); padding: 7px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
         .ali-marquee-bar marquee { font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,71,87,0.8); letter-spacing: 0.8px; text-transform: uppercase; }
 
-        /* KHUNG MENU XỔ XUỐNG (DROPDOWN) ĐẸP MẮT */
         .category-dropdown-box { padding: 0 15px 15px 15px; }
         .custom-dropdown {
             width: 100%; padding: 12px 15px; border-radius: 10px; 
@@ -109,7 +112,7 @@
         .fs-title { font-size: 12px; color: #fff; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
         .fs-time { font-size: 10px; color: #2ed573; font-weight: bold; }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
 </head>
 <body>
 
@@ -128,7 +131,7 @@
     </div>
 
     <div class="header">
-        <img class="avatar" id="ownerAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Profile">
+        <img class="avatar" id="ownerAvatarImg" src="[https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80](https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80)" alt="Profile">
         <div class="owner-name" id="ownerNameTxt">ducpm</div>
         <div class="secure-text" id="txtSecure">🔒 100% Seguro • Verificado</div>
         <div class="social-links" id="socialLinksContainer"></div>
@@ -141,11 +144,8 @@
         </marquee>
     </div>
 
-    <!-- KHUNG DROPDOWN XỔ XUỐNG CHỌN DANH MỤC -->
     <div class="category-dropdown-box">
-        <select id="categoryDropdown" class="custom-dropdown" onchange="filterCategory(this.value)">
-            <option value="all">🔥 Tất cả sản phẩm</option>
-        </select>
+        <select id="categoryDropdown" class="custom-dropdown" onchange="filterCategory(this.value)"></select>
     </div>
 
     <div id="productGrid" class="product-grid"></div>
@@ -171,19 +171,28 @@
     let globalData = { profile: {}, socials: {}, categories: [], products: [] };
     let activeCategory = 'all';
 
-    const defaultCategories = [
-        { name: "all", label: "🔥 Tất cả sản phẩm" },
-        { name: "discount50", label: "⚡ Giảm 50%+" },
-        { name: "freeship", label: "🚚 Free Ship" },
-        { name: "under10", label: "💲 Dưới $10" }
-    ];
-
+    // TỪ ĐIỂN ĐA NGÔN NGỮ CHO CÁC DANH MỤC MẶC ĐỊNH
     const translations = {
-        vi: { shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
-        pt: { shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
-        en: { shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
-        fr: { shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
-        es: { shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
+        vi: { 
+            all: "🔥 Tất cả sản phẩm", discount50: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", 
+            shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" 
+        },
+        pt: { 
+            all: "🔥 Todos os produtos", discount50: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", 
+            shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" 
+        },
+        en: { 
+            all: "🔥 All Products", discount50: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", 
+            shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" 
+        },
+        fr: { 
+            all: "🔥 Tous les produits", discount50: "⚡ 50%+ Solde", freeship: "💧 Livraison Gratuite", under10: "💲 Moins de $10", 
+            shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" 
+        },
+        es: { 
+            all: "🔥 Todos los productos", discount50: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", 
+            shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" 
+        }
     };
 
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
@@ -216,14 +225,10 @@
 
     async function fetchDataFromCloud() {
         try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': MASTER_KEY } });
+            let res = await fetch(`[https://api.jsonbin.io/v3/b/$](https://api.jsonbin.io/v3/b/$){BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
             globalData = data.record || { profile: {}, socials: {}, categories: [], products: [] };
             
-            if(!globalData.categories || globalData.categories.length === 0) {
-                globalData.categories = defaultCategories;
-            }
-
             if(globalData.profile.name) document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
             if(globalData.profile.avatar) document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
             if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
@@ -235,31 +240,36 @@
         } catch (err) {}
     }
 
+    // HIỂN THỊ MẠNG XÃ HỘI VỚI CLASS CHUẨN MÀU HOVER
     function renderSocials() {
         const s = globalData.socials || {};
         const container = document.getElementById('socialLinksContainer');
         container.innerHTML = '';
         
-        if(s.fb && s.showFb !== false) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>`;
-        if(s.tt && s.showTt !== false) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
-        if(s.ig && s.showIg !== false) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
-        if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
+        if(s.fb && s.showFb !== false) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>`;
+        if(s.tt && s.showTt !== false) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon tt"><i class="fab fa-tiktok"></i></a>`;
+        if(s.ig && s.showIg !== false) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>`;
+        if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon yt"><i class="fab fa-youtube"></i></a>`;
     }
 
-    // RENDER DANH MỤC XỔ XUỐNG KÈM ICON
+    // RENDER MENU XỔ XUỐNG ĐA NGÔN NGỮ
     function renderCategoriesDropdown() {
+        const lang = document.getElementById('langSelect').value;
+        const t = translations[lang] || translations.vi;
         const dropdown = document.getElementById('categoryDropdown');
+        
         dropdown.innerHTML = `
-            <option value="all">🔥 Tất cả sản phẩm</option>
-            <option value="discount50">⚡ Giảm 50%+</option>
-            <option value="freeship">🚚 Free Ship</option>
-            <option value="under10">💲 Dưới $10</option>
+            <option value="all">${t.all}</option>
+            <option value="discount50">${t.discount50}</option>
+            <option value="freeship">${t.freeship}</option>
+            <option value="under10">${t.under10}</option>
         `;
 
-        // Thêm các danh mục tự tạo từ Admin vào dropdown
+        // Các danh mục tùy chỉnh do bạn tự thêm từ Admin
         (globalData.categories || []).forEach(c => {
-            if(c.name !== "all" && c.name !== "discount50" && c.name !== "freeship" && c.name !== "under10") {
-                dropdown.innerHTML += `<option value="${c.name}">${c.icon || '📁'} ${c.name}</option>`;
+            if(!['all', 'discount50', 'freeship', 'under10'].includes(c.name)) {
+                let catVal = c.name || c.label;
+                dropdown.innerHTML += `<option value="${catVal}">${c.icon || '📁'} ${catVal}</option>`;
             }
         });
 
@@ -345,7 +355,7 @@
         const flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
         const lang = document.getElementById('langSelect').value;
         
-        document.getElementById('fsImg').src = p.image || 'https://via.placeholder.com/50';
+        document.getElementById('fsImg').src = p.image || '[https://via.placeholder.com/50](https://via.placeholder.com/50)';
         document.getElementById('fsFlag').innerText = flag;
         document.getElementById('fsBuyer').innerText = `${name} ${fakeActions[lang] || fakeActions.vi}`;
         document.getElementById('fsTitle').innerText = p.title;
