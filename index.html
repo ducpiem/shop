@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life in Sketches
- do Brasil - AliExpress Exclusive Deals</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/ducpiem/ducpm/refs/heads/ducpiem/Dlogo-removebg-preview.png">
+    <title>Achadinhos do Brasil - AliExpress Exclusive Deals</title>
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         :root { --primary-red: #ff4757; --ali-red: #ff6b81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -41,6 +40,7 @@
         .owner-name { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
         .secure-text { font-size: 12px; color: #2ed573; font-weight: 700; background: rgba(46,213,115,0.12); display: inline-block; padding: 5px 14px; border-radius: 15px; border: 1px solid rgba(46,213,115,0.3); }
 
+        /* HIỆU ỨNG MÀU GRADIENT ĐẸP MẮT CHO MẠNG XÃ HỘI */
         .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 15px 0; transition: 0.3s; }
         .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.3s; }
         
@@ -58,6 +58,7 @@
             background: rgba(30, 33, 48, 0.95); border: 1px solid rgba(255, 71, 87, 0.5); 
             color: #fff; font-size: 14px; font-weight: bold; cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4); outline: none;
+            display: flex; align-items: center; justify-content: space-between;
         }
         .custom-dropdown option { background: #161822; color: #fff; padding: 10px; }
 
@@ -111,11 +112,6 @@
         .fs-name { font-size: 11px; color: #a4b0be; margin-bottom: 2px; }
         .fs-title { font-size: 12px; color: #fff; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
         .fs-time { font-size: 10px; color: #2ed573; font-weight: bold; }
-
-        /* Ẩn widget mặc định của Google Translate để dùng select custom */
-        #google_translate_element { display: none; }
-        .goog-te-banner-frame { display: none !important; }
-        body { top: 0 !important; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -126,7 +122,7 @@
 <div class="container">
     <div class="top-bar">
         <span></span>
-        <select class="lang-select" id="langSelect" onchange="changeLanguageByWidget(this.value)">
+        <select class="lang-select" id="langSelect" onchange="changeLanguage()">
             <option value="vi">🇻🇳 Tiếng Việt</option>
             <option value="pt">🇧🇷 Português</option>
             <option value="en">🇺🇸 English</option>
@@ -169,16 +165,6 @@
     </div>
 </div>
 
-<!-- Widget ngầm Google Translate -->
-<div id="google_translate_element"></div>
-
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'vi', autoDisplay: false}, 'google_translate_element');
-    }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 <script>
     const BIN_ID = "6abf8b69ffd5d1605345a07d";
     const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq";
@@ -186,22 +172,43 @@
     let globalData = { profile: {}, socials: {}, categories: [], products: [] };
     let activeCategory = 'all';
 
+    const translations = {
+        vi: { 
+            all: "🔥 Tất cả sản phẩm", discount50: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", 
+            shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" 
+        },
+        pt: { 
+            all: "🔥 Todos os produtos", discount50: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", 
+            shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" 
+        },
+        en: { 
+            all: "🔥 All Products", discount50: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", 
+            shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" 
+        },
+        fr: { 
+            all: "🔥 Tous les produits", discount50: "⚡ 50%+ Solde", freeship: "💧 Livraison Gratuite", under10: "💲 Moins de $10", 
+            shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" 
+        },
+        es: { 
+            all: "🔥 Todos los productos", discount50: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", 
+            shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" 
+        }
+    };
+
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
     const fakeFlags = ["🇧🇷", "🇺🇸", "🇫🇷", "🇪🇸", "🇵🇹", "🇨🇴", "🇦🇷", "🇲🇽", "🇨🇱", "🇬🇧", "🇮🇹", "🇻🇳"];
-
-    function changeLanguageByWidget(langCode) {
-        localStorage.setItem('user_lang', langCode);
-        let frame = document.querySelector('.goog-te-combo');
-        if (frame) {
-            frame.value = langCode;
-            frame.dispatchEvent(new Event('change'));
-        }
-    }
+    const fakeActions = { vi: "vừa mới mua", pt: "acabou de comprar", en: "just purchased", fr: "vient d'acheter", es: "acaba de comprar" };
+    const fakeTime = { vi: "Vài giây trước ⚡", pt: "Agora mesmo ⚡", en: "Just now ⚡", fr: "À l'instant ⚡", es: "Justo ahora ⚡" };
 
     function initLanguage() {
-        let savedLang = localStorage.getItem('user_lang') || 'pt';
+        let savedLang = localStorage.getItem('user_lang') || 'vi';
         document.getElementById('langSelect').value = savedLang;
-        setTimeout(() => { changeLanguageByWidget(savedLang); }, 1000);
+    }
+
+    function changeLanguage() {
+        localStorage.setItem('user_lang', document.getElementById('langSelect').value);
+        renderCategoriesDropdown();
+        renderGrid();
     }
 
     function createSnowflakes() {
@@ -210,116 +217,69 @@
             let flake = document.createElement('div'); flake.classList.add('snowflake');
             flake.style.width = flake.style.height = `${Math.random() * 4 + 2}px`;
             flake.style.left = `${Math.random() * 100}%`;
-            flake.style.top = `${Math.random() * -100}%`;
-            flake.style.animationDuration = `${Math.random() * 8 + 4}s`;
+            flake.style.animationDuration = `${Math.random() * 8 + 6}s`;
             flake.style.animationDelay = `${Math.random() * 5}s`;
             snowContainer.appendChild(flake);
         }
     }
 
-    async function fetchData() {
+    async function fetchDataFromCloud() {
         try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                headers: { 'X-Master-Key': MASTER_KEY }
-            });
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': MASTER_KEY } });
             let data = await res.json();
-            globalData = data.record || globalData;
+            globalData = data.record || { profile: {}, socials: {}, categories: [], products: [] };
             
-            renderProfile();
+            if(globalData.profile.name) document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
+            if(globalData.profile.avatar) document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
+            if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
+            if(globalData.profile.copyright) document.getElementById('footerCopyright').innerText = globalData.profile.copyright;
+
+            renderSocials(); 
             renderCategoriesDropdown();
             renderGrid();
-        } catch (e) {
-            console.error("Lỗi tải dữ liệu:", e);
-        }
+        } catch (err) {}
     }
 
-    function renderProfile() {
-        if(globalData.profile && globalData.profile.name) {
-            document.getElementById('ownerNameTxt').innerText = globalData.profile.name;
-            document.title = `${globalData.profile.name} - Achadinhos AliExpress`;
-            if(globalData.profile.avatar) {
-                document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
-            }
-        }
-
-        let sHtml = '';
-        if(globalData.socials) {
-            if(globalData.socials.facebook) sHtml += `<a href="${globalData.socials.facebook}" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>`;
-            if(globalData.socials.tiktok) sHtml += `<a href="${globalData.socials.tiktok}" target="_blank" class="social-icon tt"><i class="fab fa-tiktok"></i></a>`;
-            if(globalData.socials.instagram) sHtml += `<a href="${globalData.socials.instagram}" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>`;
-            if(globalData.socials.youtube) sHtml += `<a href="${globalData.socials.youtube}" target="_blank" class="social-icon yt"><i class="fab fa-youtube"></i></a>`;
-        }
-        document.getElementById('socialLinksContainer').innerHTML = sHtml;
+    function renderSocials() {
+        const s = globalData.socials || {};
+        const container = document.getElementById('socialLinksContainer');
+        container.innerHTML = '';
+        
+        if(s.fb && s.showFb !== false) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>`;
+        if(s.tt && s.showTt !== false) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon tt"><i class="fab fa-tiktok"></i></a>`;
+        if(s.ig && s.showIg !== false) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>`;
+        if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon yt"><i class="fab fa-youtube"></i></a>`;
     }
 
     function renderCategoriesDropdown() {
+        const lang = document.getElementById('langSelect').value;
+        const t = translations[lang] || translations.vi;
         const dropdown = document.getElementById('categoryDropdown');
-        let html = `<option value="all">🔥 Todos os produtos / All Products</option>`;
         
-        if (globalData.categories && globalData.categories.length > 0) {
-            globalData.categories.forEach(cat => {
-                html += `<option value="${cat.id}">${cat.name}</option>`;
-            });
-        }
-        dropdown.innerHTML = html;
+        dropdown.innerHTML = `
+            <option value="all">${t.all}</option>
+            <option value="discount50">${t.discount50}</option>
+            <option value="freeship">${t.freeship}</option>
+            <option value="under10">${t.under10}</option>
+        `;
+
+        (globalData.categories || []).forEach(c => {
+            if(!['all', 'discount50', 'freeship', 'under10'].includes(c.name)) {
+                let catVal = c.name || c.label;
+                dropdown.innerHTML += `<option value="${catVal}">${c.icon || '📁'} ${catVal}</option>`;
+            }
+        });
+
         dropdown.value = activeCategory;
     }
 
-    function filterCategory(catId) {
-        activeCategory = catId;
+    function filterCategory(val) {
+        activeCategory = val;
         renderGrid();
     }
 
-    function renderGrid() {
-        const grid = document.getElementById('productGrid');
-        let products = globalData.products || [];
-
-        if (activeCategory !== 'all') {
-            products = products.filter(p => String(p.category) === String(activeCategory));
-        }
-
-        if (products.length === 0) {
-            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: #a4b0be; font-size: 13px;">Nenhum produto encontrado nesta categoria.</div>`;
-            return;
-        }
-
-        let html = '';
-        products.forEach(p => {
-            let isPinned = p.pinned ? 'pinned' : '';
-            let pinBadge = p.pinned ? `<div class="pin-badge"><i class="fas fa-thumbtack"></i> DESTAQUE</div>` : '';
-            let discountBadge = p.discount ? `<div class="badge-discount">${p.discount}</div>` : '';
-            let subPriceHtml = p.subPrice ? `<div class="price-sub">${p.subPrice}</div>` : '';
-            let shippingHtml = p.shipping ? `<div class="shipping-tag"><i class="fas fa-truck"></i> ${p.shipping}</div>` : `<div class="shipping-tag" style="opacity:0">Free</div>`;
-            let ratingHtml = p.rating ? `<span class="star-icon">★</span> ${p.rating}` : '';
-            let soldHtml = p.sold ? `• ${p.sold}` : '';
-
-            html += `
-                <div class="product-card ${isPinned}">
-                    ${pinBadge}
-                    <div class="img-wrap">
-                        ${discountBadge}
-                        <img class="product-img" src="${p.image}" alt="${p.title}" loading="lazy">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${p.title}</div>
-                        <div class="rating-sold">${ratingHtml} ${soldHtml}</div>
-                        <div class="price-sub-wrap">
-                            ${subPriceHtml}
-                        </div>
-                        <div class="price-row">
-                            <div class="price-main">${p.price}</div>
-                            <button class="copy-link-btn" onclick="copyAffLink('${p.link}')" title="Copiar Link"><i class="fas fa-copy"></i></button>
-                        </div>
-                        ${shippingHtml}
-                        <a href="${p.link}" target="_blank" class="buy-btn">COMPRAR 🛒</a>
-                    </div>
-                </div>
-            `;
-        });
-        grid.innerHTML = html;
-    }
-
-    function copyAffLink(url) {
+    function copyAffiliateLink(event, url) {
+        event.preventDefault(); event.stopPropagation();
         navigator.clipboard.writeText(url).then(() => {
             let toast = document.getElementById('copyToast');
             toast.classList.add('show');
@@ -327,29 +287,86 @@
         });
     }
 
-    function initFakeSale() {
-        if(!globalData.products || globalData.products.length === 0) return;
-        let p = globalData.products[Math.floor(Math.random() * globalData.products.length)];
-        let name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
-        let flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
+    function renderGrid() {
+        const lang = document.getElementById('langSelect').value; const t = translations[lang] || translations.vi;
+        const gridContainer = document.getElementById('productGrid'); gridContainer.innerHTML = '';
+        
+        let filtered = (globalData.products || []).filter(p => {
+            let badgeNum = parseInt((p.badge || "").replace(/[^\d]/g, '')) || 0;
+            let mainPriceNum = parseFloat((p.mainPrice || "0").replace(/[^\d,.]/g, '').replace(',', '.')) || 0;
 
-        document.getElementById('fsImg').src = p.image;
-        document.getElementById('fsFlag').innerText = flag;
-        document.getElementById('fsBuyer').innerText = name;
-        document.getElementById('fsTitle').innerText = p.title;
-        document.getElementById('fsTimeTxt').innerText = "Acabou de comprar ⚡";
+            if (activeCategory === 'discount50') return badgeNum >= 50;
+            if (activeCategory === 'freeship') return true;
+            if (activeCategory === 'under10') return mainPriceNum > 0 && mainPriceNum < 10;
+            if (activeCategory === 'all') return true;
+            
+            return (p.category || '') === activeCategory;
+        });
 
-        let popup = document.getElementById('fakeSalePopup');
-        popup.classList.add('show');
-        setTimeout(() => { popup.classList.remove('show'); }, 4000);
+        filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+
+        if(filtered.length === 0) {
+            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#a4b0be; padding: 25px;">Không tìm thấy sản phẩm nào.</p>`;
+            return;
+        }
+
+        filtered.forEach(p => {
+            let pinHtml = p.pinned ? `<span class="pin-badge">📌 HOT</span>` : '';
+            let cardClass = p.pinned ? "product-card pinned" : "product-card";
+            let safeLink = p.link.replace(/'/g, "\\'");
+            
+            gridContainer.innerHTML += `
+                <div class="${cardClass}">
+                    <a href="${p.link}" target="_blank" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; flex-grow:1;">
+                        <div class="img-wrap">
+                            <img class="product-img" src="${p.image}" alt="Product" loading="lazy">
+                            <span class="badge-discount">${p.badge || 'SALE'}</span>
+                            ${pinHtml}
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${p.title}</div>
+                            <div class="rating-sold">
+                                <span class="star-icon">★</span> <b>${p.rating || '4.9'}</b> (${p.sold || '2k+'})
+                            </div>
+                            <div class="price-row">
+                                <div class="price-main">US $${p.mainPrice}</div>
+                                <button class="copy-link-btn" onclick="copyAffiliateLink(event, '${safeLink}')" title="Copy Link Affiliate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="price-sub">US $${p.subPrice}</div>
+                            <div class="shipping-tag">${t.shipping}</div>
+                            <a href="${p.link}" target="_blank" class="buy-btn">${t.buy}</a>
+                        </div>
+                    </a>
+                </div>
+            `;
+        });
     }
 
-    window.onload = function() {
-        createSnowflakes();
-        fetchData();
-        initLanguage();
-        setInterval(initFakeSale, 9000);
-    };
+    function triggerFakeSale() {
+        if(!globalData.products || globalData.products.length === 0) return;
+        const popup = document.getElementById('fakeSalePopup');
+        const p = globalData.products[Math.floor(Math.random() * globalData.products.length)];
+        const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+        const flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
+        const lang = document.getElementById('langSelect').value;
+        
+        document.getElementById('fsImg').src = p.image || 'https://via.placeholder.com/50';
+        document.getElementById('fsFlag').innerText = flag;
+        document.getElementById('fsBuyer').innerText = `${name} ${fakeActions[lang] || fakeActions.vi}`;
+        document.getElementById('fsTitle').innerText = p.title;
+        document.getElementById('fsTimeTxt').innerText = fakeTime[lang] || fakeTime.vi;
+        
+        popup.classList.add('show');
+        setTimeout(() => { popup.classList.remove('show'); }, 4500);
+    }
+
+    setInterval(triggerFakeSale, 30000);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initLanguage(); createSnowflakes(); fetchDataFromCloud();
+    });
 </script>
 </body>
 </html>
