@@ -15,6 +15,30 @@
             position: relative;
         }
 
+        /* MÀN HÌNH CHÀO KIỂU APPLE "HELLO" */
+        #appleIntroScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000000; z-index: 9999; display: flex; align-items: center; justify-content: center;
+            animation: fadeOutIntro 0.8s ease 1.8s forwards; pointer-events: none;
+        }
+        .apple-hello-text {
+            font-size: 38px; font-weight: 300; letter-spacing: 2px; color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            text-align: center; opacity: 0; transform: scale(0.95);
+            animation: introTextAnim 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .apple-hello-text span { color: #ff4757; font-weight: 700; display: block; font-size: 20px; margin-top: 8px; letter-spacing: 1px; }
+
+        @keyframes introTextAnim {
+            0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+            50% { opacity: 1; transform: scale(1); filter: blur(0px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+        }
+        @keyframes fadeOutIntro {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
         /* HIỆU ỨNG BÔNG TUYẾT RƠI CHẬM MỜ MỜ */
         .snow-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -46,9 +70,13 @@
         .owner-name { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
         .secure-text { font-size: 12px; color: #2ed573; font-weight: 700; background: rgba(46,213,115,0.12); display: inline-block; padding: 5px 14px; border-radius: 15px; border: 1px solid rgba(46,213,115,0.3); }
 
+        /* MẠNG XÃ HỘI CHUẨN MÀU */
         .social-links { display: flex; justify-content: center; gap: 12px; margin: 15px 0 20px 0; }
-        .social-icon { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 16px; border: 1px solid rgba(255,255,255,0.15); transition: 0.2s; }
-        .social-icon:hover { background: var(--primary-red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,71,87,0.4); }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); transition: 0.2s; }
+        .social-icon.fb:hover { background: #1877F2; box-shadow: 0 0 15px #1877F2; transform: translateY(-3px); }
+        .social-icon.tt:hover { background: #00f2fe; color: #000; box-shadow: 0 0 15px #00f2fe; transform: translateY(-3px); }
+        .social-icon.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); box-shadow: 0 0 15px #d6249f; transform: translateY(-3px); }
+        .social-icon.yt:hover { background: #FF0000; box-shadow: 0 0 15px #FF0000; transform: translateY(-3px); }
 
         .category-tabs { display: flex; justify-content: center; gap: 8px; padding: 0 15px 20px 15px; overflow-x: auto; }
         .tab-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #a4b0be; cursor: pointer; white-space: nowrap; transition: 0.2s; }
@@ -56,7 +84,6 @@
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; flex-grow: 1; }
         
-        /* ĐÃ THU GỌN KHOẢNG TRỐNG VÀ CÂN ĐỐI CARD */
         .product-card { 
             background: rgba(26, 29, 41, 0.9); border-radius: 12px; overflow: hidden; text-decoration: none; 
             display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.08);
@@ -66,7 +93,10 @@
 
         .img-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
         .product-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
-        .badge-discount { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; box-shadow: 0 2px 8px rgba(255,71,87,0.5); }
+        
+        /* NHÃN GIẢM GIÁ SHOCK */
+        .badge-discount { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff4757, #ff3838); color: white; font-size: 11px; font-weight: 900; padding: 5px 9px; border-radius: 6px; text-transform: uppercase; box-shadow: 0 3px 10px rgba(255,71,87,0.6); animation: badgePulse 2s infinite; }
+        @keyframes badgePulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         .product-info { padding: 8px 10px 10px 10px; display: flex; flex-direction: column; flex-grow: 1; }
         .product-title { font-size: 12px; color: #f1f2f6; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; line-height: 1.25; }
@@ -74,8 +104,9 @@
         .rating-sold { font-size: 11px; color: #a4b0be; margin-bottom: 4px; display: flex; align-items: center; gap: 3px; }
         .star-icon { color: #f39c12; }
 
-        .price-main { font-size: 16px; font-weight: 950; color: #ffffff; margin-bottom: 0px; }
-        .price-sub { font-size: 11px; color: #ff6b81; text-decoration: line-through; margin-bottom: 4px; }
+        /* GIÁ TIỀN SHOCK ĐẬP VÀO MẮT */
+        .price-main { font-size: 19px; font-weight: 950; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 1px; letter-spacing: 0.3px; }
+        .price-sub { font-size: 12px; color: #ff6b81; text-decoration: line-through; font-weight: 700; margin-bottom: 4px; }
         .shipping-tag { font-size: 10px; color: #2ed573; font-weight: bold; margin-bottom: 6px; }
 
         .buy-btn { 
@@ -96,7 +127,15 @@
 </head>
 <body>
 
-    <!-- Lớp hiệu ứng bông tuyết rơi mờ chậm -->
+    <!-- Màn hình chào kiểu Apple -->
+    <div id="appleIntroScreen">
+        <div class="apple-hello-text">
+            HELLO,
+            <span>welcome my bio</span>
+        </div>
+    </div>
+
+    <!-- Hạt tuyết rơi -->
     <div class="snow-container" id="snowContainer"></div>
 
 <div class="container">
@@ -165,18 +204,17 @@
         renderGrid();
     }
 
-    // Tạo hiệu ứng bông tuyết mờ rơi chậm
     function createSnowflakes() {
         const snowContainer = document.getElementById('snowContainer');
-        const count = 35; // Số lượng hạt tuyết
+        const count = 35;
         for(let i=0; i<count; i++) {
             let flake = document.createElement('div');
             flake.classList.add('snowflake');
-            let size = Math.random() * 4 + 2; // Kích thước từ 2px đến 6px
+            let size = Math.random() * 4 + 2;
             flake.style.width = `${size}px`;
             flake.style.height = `${size}px`;
             flake.style.left = `${Math.random() * 100}%`;
-            let duration = Math.random() * 8 + 6; // Tốc độ rơi chậm từ 6s đến 14s
+            let duration = Math.random() * 8 + 6;
             let delay = Math.random() * 5;
             flake.style.animationDuration = `${duration}s`;
             flake.style.animationDelay = `${delay}s`;
@@ -214,10 +252,10 @@
         const container = document.getElementById('socialLinksContainer');
         container.innerHTML = '';
 
-        if(s.ig) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
-        if(s.tt) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
-        if(s.yt) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
-        if(s.wa) container.innerHTML += `<a href="${s.wa}" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>`;
+        if(s.fb) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>`;
+        if(s.tt) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon tt"><i class="fab fa-tiktok"></i></a>`;
+        if(s.ig) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>`;
+        if(s.yt) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon yt"><i class="fab fa-youtube"></i></a>`;
     }
 
     function filterCategory(cat, btn) {
