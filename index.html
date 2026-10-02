@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life in Sketches
- do Brasil - AliExpress Exclusive Deals</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/ducpiem/ducpm/refs/heads/ducpiem/Dlogo-removebg-preview.png">
+    <title>Achadinhos do Brasil - AliExpress Exclusive Deals</title>
+    <link rel="icon" href="https://img.icons8.com/color/48/shopping-bag.png">
     <style>
         :root { --primary-red: #ff4757; --ali-red: #ff6b81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -17,14 +16,8 @@
             position: relative;
         }
 
-        .snow-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1; overflow: hidden;
-        }
-        .snowflake {
-            position: absolute; background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%; animation: fall linear infinite;
-        }
+        .snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .snowflake { position: absolute; background: rgba(255, 255, 255, 0.6); border-radius: 50%; animation: fall linear infinite; }
         @keyframes fall {
             0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
             20% { opacity: 0.8; }
@@ -53,7 +46,9 @@
         .ali-marquee-bar { background: rgba(255, 71, 87, 0.12); border-top: 1px solid rgba(255,71,87,0.3); border-bottom: 1px solid rgba(255,71,87,0.3); padding: 7px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
         .ali-marquee-bar marquee { font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,71,87,0.8); letter-spacing: 0.8px; text-transform: uppercase; }
 
-        .category-tabs { display: flex; justify-content: center; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; }
+        /* THANH DANH MỤC ĐỘNG */
+        .category-tabs { display: flex; justify-content: flex-start; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; scrollbar-width: none; }
+        .category-tabs::-webkit-scrollbar { display: none; }
         .tab-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #a4b0be; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .tab-btn.active { background: var(--primary-red); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(255,71,87,0.4); }
 
@@ -79,8 +74,6 @@
 
         .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px; }
         .price-main { font-size: 17px; font-weight: 950; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); letter-spacing: 0.3px; }
-        
-        /* NÚT COPY LINK ICON */
         .copy-link-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 12px; }
         .copy-link-btn:hover { background: #2ed573; border-color: #2ed573; transform: scale(1.1); box-shadow: 0 0 10px rgba(46, 213, 115, 0.5); }
 
@@ -92,7 +85,6 @@
 
         .footer { text-align: center; padding: 25px 15px 10px 15px; font-size: 11px; color: #747d8c; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 30px; }
         
-        /* Toast thông báo copy */
         #copyToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px); background: #2ed573; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 20px; font-size: 13px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 9999; }
         #copyToast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
@@ -143,11 +135,9 @@
         </marquee>
     </div>
 
-    <div class="category-tabs">
-        <button class="tab-btn active" onclick="filterCategory('all', this)" id="tabAll">🔥 Tất cả</button>
-        <button class="tab-btn" onclick="filterCategory('discount50', this)" id="tabDiscount">⚡ Giảm 50%+</button>
-        <button class="tab-btn" onclick="filterCategory('freeship', this)" id="tabFreeship">🚚 Free Ship</button>
-        <button class="tab-btn" onclick="filterCategory('under10', this)" id="tabUnder10">💲 Dưới $10</button>
+    <!-- THANH DANH MỤC ĐỘNG TỰ SINH THEO SẢN PHẨM -->
+    <div class="category-tabs" id="categoryTabsContainer">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">🔥 Tất cả</button>
     </div>
 
     <div id="productGrid" class="product-grid"></div>
@@ -155,8 +145,7 @@
     <div class="footer" id="footerCopyright">© 2026 Achadinhos. All Rights Reserved.</div>
 </div>
 
-<!-- Toast thông báo đã copy link -->
-<div id="copyToast">Đã sao chép link Affiliate! ✔️</div>
+<div id="copyToast">Đã sao chép link Affiliate! ✔️️</div>
 
 <div id="fakeSalePopup" class="fake-sale">
     <img id="fsImg" src="" alt="Sản phẩm">
@@ -175,11 +164,11 @@
     let activeCategory = 'all';
 
     const translations = {
-        vi: { all: "🔥 Tất cả", discount: "⚡ Giảm 50%+", freeship: "🚚 Free Ship", under10: "💲 Dưới $10", shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
-        pt: { all: "🔥 Todos", discount: "⚡ Desconto 50%+", freeship: "🚚 Frete Grátis", under10: "💲 Abaixo de $10", shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
-        en: { all: "🔥 All Items", discount: "⚡ 50%+ OFF", freeship: "🚚 Free Ship", under10: "💲 Under $10", shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
-        fr: { all: "🔥 Tous", discount: "⚡ 50%+ Solde", freeship: "💧 Livraison", under10: "💲 Moins de $10", shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
-        es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
+        vi: { all: "🔥 Tất cả", shipping: "⚡ Miễn phí vận chuyển", buy: "MUA NGAY 🛒" },
+        pt: { all: "🔥 Todos", shipping: "⚡ Frete Grátis", buy: "COMPRAR AGORA 🛒" },
+        en: { all: "🔥 All Items", shipping: "⚡ Free Shipping", buy: "BUY NOW 🛒" },
+        fr: { all: "🔥 Tous", shipping: "⚡ Livraison Gratuite", buy: "ACHETER 🛒" },
+        es: { all: "🔥 Todos", shipping: "⚡ Envío Gratis", buy: "COMPRAR AHORA 🛒" }
     };
 
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
@@ -194,6 +183,7 @@
 
     function changeLanguage() {
         localStorage.setItem('user_lang', document.getElementById('langSelect').value);
+        renderCategories();
         renderGrid();
     }
 
@@ -220,7 +210,9 @@
             if(globalData.profile.secure) document.getElementById('txtSecure').innerText = globalData.profile.secure;
             if(globalData.profile.copyright) document.getElementById('footerCopyright').innerText = globalData.profile.copyright;
 
-            renderSocials(); renderGrid();
+            renderSocials(); 
+            renderCategories();
+            renderGrid();
         } catch (err) {}
     }
 
@@ -235,48 +227,60 @@
         if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
     }
 
+    // TỰ ĐỘNG QUÉT VÀ HIỂN THỊ CÁC DANH MỤC TỪ KHO SẢN PHẨM
+    function renderCategories() {
+        const lang = document.getElementById('langSelect').value; 
+        const t = translations[lang] || translations.vi;
+        const container = document.getElementById('categoryTabsContainer');
+        
+        // Lấy danh sách các danh mục duy nhất từ sản phẩm
+        let cats = [...new Set((globalData.products || []).map(p => p.category || 'Khác'))];
+        
+        let html = `<button class="tab-btn ${activeCategory === 'all' ? 'active' : ''}" onclick="filterCategory('all', this)">${t.all}</button>`;
+        
+        cats.forEach(cat => {
+            let isActive = activeCategory === cat ? 'active' : '';
+            html += `<button class="tab-btn ${isActive}" onclick="filterCategory('${cat}', this)">📁 ${cat}</button>`;
+        });
+        
+        container.innerHTML = html;
+    }
+
     function filterCategory(cat, btn) {
         activeCategory = cat;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active'); renderGrid();
+        if(btn) btn.classList.add('active');
+        renderGrid();
     }
 
-    // Hàm thực hiện copy link khi bấm vào nút icon
     function copyAffiliateLink(event, url) {
-        event.preventDefault(); // Ngăn việc mở link sản phẩm khi bấm vào nút copy
-        event.stopPropagation();
-        
+        event.preventDefault(); event.stopPropagation();
         navigator.clipboard.writeText(url).then(() => {
             let toast = document.getElementById('copyToast');
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 2000);
-        }).catch(err => {
-            alert("Không thể sao chép liên kết!");
         });
     }
 
     function renderGrid() {
-        const lang = document.getElementById('langSelect').value; const t = translations[lang];
-        document.getElementById('tabAll').innerText = t.all; document.getElementById('tabDiscount').innerText = t.discount;
-        document.getElementById('tabFreeship').innerText = t.freeship; document.getElementById('tabUnder10').innerText = t.under10;
-
+        const lang = document.getElementById('langSelect').value; const t = translations[lang] || translations.vi;
         const gridContainer = document.getElementById('productGrid'); gridContainer.innerHTML = '';
+        
         let filtered = (globalData.products || []).filter(p => {
-            let badgeNum = parseInt((p.badge || "").replace(/[^\d]/g, '')) || 0;
-            let mainPriceNum = parseFloat((p.mainPrice || "0").replace(/[^\d,.]/g, '').replace(',', '.')) || 0;
-            if (activeCategory === 'discount50') return badgeNum >= 50;
-            if (activeCategory === 'freeship') return true;
-            if (activeCategory === 'under10') return mainPriceNum > 0 && mainPriceNum < 10;
-            return true;
+            if (activeCategory === 'all') return true;
+            return (p.category || 'Khác') === activeCategory;
         });
 
         filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
+        if(filtered.length === 0) {
+            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#a4b0be; padding: 25px;">Không có sản phẩm trong danh mục này.</p>`;
+            return;
+        }
+
         filtered.forEach(p => {
             let pinHtml = p.pinned ? `<span class="pin-badge">📌 HOT</span>` : '';
             let cardClass = p.pinned ? "product-card pinned" : "product-card";
-            
-            // Mã hóa link an toàn để đưa vào hàm JS
             let safeLink = p.link.replace(/'/g, "\\'");
             
             gridContainer.innerHTML += `
@@ -311,7 +315,6 @@
     function triggerFakeSale() {
         if(!globalData.products || globalData.products.length === 0) return;
         const popup = document.getElementById('fakeSalePopup');
-        
         const p = globalData.products[Math.floor(Math.random() * globalData.products.length)];
         const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
         const flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
@@ -319,9 +322,9 @@
         
         document.getElementById('fsImg').src = p.image || 'https://via.placeholder.com/50';
         document.getElementById('fsFlag').innerText = flag;
-        document.getElementById('fsBuyer').innerText = `${name} ${fakeActions[lang]}`;
+        document.getElementById('fsBuyer').innerText = `${name} ${fakeActions[lang] || fakeActions.vi}`;
         document.getElementById('fsTitle').innerText = p.title;
-        document.getElementById('fsTimeTxt').innerText = fakeTime[lang];
+        document.getElementById('fsTimeTxt').innerText = fakeTime[lang] || fakeTime.vi;
         
         popup.classList.add('show');
         setTimeout(() => { popup.classList.remove('show'); }, 4500);
