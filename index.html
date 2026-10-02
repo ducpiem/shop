@@ -63,7 +63,6 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: 0.3s; position: relative;
         }
         
-        /* Hiệu ứng viền vàng cho sản phẩm được ghim */
         .product-card.pinned { border: 1px solid rgba(241, 196, 15, 0.5); box-shadow: 0 0 15px rgba(241, 196, 15, 0.2); }
         .pin-badge { position: absolute; top: 8px; right: 8px; background: #f1c40f; color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10; }
 
@@ -86,7 +85,6 @@
 
         .footer { text-align: center; padding: 25px 15px 10px 15px; font-size: 11px; color: #747d8c; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 30px; }
         
-        /* CSS CHO FAKE SALE POPUP CHIM MỒI */
         .fake-sale {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); 
             width: 90%; max-width: 380px; background: rgba(22, 24, 34, 0.95); backdrop-filter: blur(10px);
@@ -146,7 +144,6 @@
     <div class="footer" id="footerCopyright">© 2026 Achadinhos. All Rights Reserved.</div>
 </div>
 
-<!-- FAKE SALE POPUP CHIM MỒI -->
 <div id="fakeSalePopup" class="fake-sale">
     <img id="fsImg" src="" alt="Sản phẩm">
     <div class="fs-info">
@@ -171,7 +168,6 @@
         es: { all: "🔥 Todos", discount: "⚡ 50%+ Descuento", freeship: "🚚 Envío Gratis", under10: "💲 Menos de $10", shipping: "⚡ Envío Gratis" }
     };
 
-    // DỮ LIỆU FAKE SALE
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
     const fakeFlags = ["🇧🇷", "🇺🇸", "🇫🇷", "🇪🇸", "🇵🇹", "🇨🇴", "🇦🇷", "🇲🇽", "🇨🇱", "🇬🇧", "🇮🇹", "🇻🇳"];
     const fakeActions = { vi: "vừa mới mua", pt: "acabou de comprar", en: "just purchased", fr: "vient d'acheter", es: "acaba de comprar" };
@@ -219,17 +215,11 @@
         const container = document.getElementById('socialLinksContainer');
         container.innerHTML = '';
         
-        // KIỂM TRA TRẠNG THÁI ẨN / HIỆN MXH TỪ QUẢN TRỊ
-        if(globalData.profile.showSocials === false) {
-            container.style.display = 'none'; return;
-        } else {
-            container.style.display = 'flex';
-        }
-
-        if(s.fb) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>`;
-        if(s.tt) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
-        if(s.ig) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
-        if(s.yt) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
+        // Chỉ vẽ ra (hiển thị) mạng xã hội nào có link và trạng thái = Bật (true)
+        if(s.fb && s.showFb !== false) container.innerHTML += `<a href="${s.fb}" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>`;
+        if(s.tt && s.showTt !== false) container.innerHTML += `<a href="${s.tt}" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>`;
+        if(s.ig && s.showIg !== false) container.innerHTML += `<a href="${s.ig}" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>`;
+        if(s.yt && s.showYt !== false) container.innerHTML += `<a href="${s.yt}" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>`;
     }
 
     function filterCategory(cat, btn) {
@@ -253,7 +243,6 @@
             return true;
         });
 
-        // SẮP XẾP: NHỮNG SẢN PHẨM GHIM (PINNED) LÊN ĐẦU
         filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
         filtered.forEach(p => {
@@ -282,12 +271,10 @@
         });
     }
 
-    // --- LOGIC HIỂN THỊ POPUP FAKE SALE (CHIM MỒI) ---
     function triggerFakeSale() {
         if(!globalData.products || globalData.products.length === 0) return;
         const popup = document.getElementById('fakeSalePopup');
         
-        // Bốc ngẫu nhiên 1 sản phẩm và thông tin người mua
         const p = globalData.products[Math.floor(Math.random() * globalData.products.length)];
         const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
         const flag = fakeFlags[Math.floor(Math.random() * fakeFlags.length)];
@@ -299,14 +286,10 @@
         document.getElementById('fsTitle').innerText = p.title;
         document.getElementById('fsTimeTxt').innerText = fakeTime[lang];
         
-        // Hiện lên
         popup.classList.add('show');
-        
-        // Ẩn đi sau 4.5 giây
         setTimeout(() => { popup.classList.remove('show'); }, 4500);
     }
 
-    // Chạy Popup mỗi 30 giây (30000 ms)
     setInterval(triggerFakeSale, 30000);
 
     document.addEventListener('DOMContentLoaded', () => {
