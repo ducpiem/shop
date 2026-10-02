@@ -120,7 +120,7 @@
 <div class="container">
     <div class="top-bar">
         <span></span>
-        <select class="lang-select" id="langSelect" onchange="changeLanguage()">
+        <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
             <option value="vi">🇻🇳 Tiếng Việt</option>
             <option value="pt">🇧🇷 Português</option>
             <option value="en">🇺🇸 English</option>
@@ -169,51 +169,17 @@
     
     let globalData = { profile: {}, socials: {}, categories: [], products: [] };
     let activeCategory = 'all';
-    let currentLang = 'pt';
-
-    // Bảng từ điển thông minh tự động dịch cho các danh mục tự tạo nhanh
-    const smartTranslations = {
-        vi: { all: "🔥 Tất cả sản phẩm", buy: "MUA NGAY 🛒", sold: "đã bán", secure: "🔒 100% Bảo mật • Đã xác thực" },
-        pt: { all: "🔥 Todos os produtos", buy: "COMPRAR AGORA 🛒", sold: "vendidos", secure: "🔒 100% Seguro • Verificado" },
-        en: { all: "🔥 All Products", buy: "BUY NOW 🛒", sold: "sold", secure: "🔒 100% Secure • Verified" },
-        fr: { all: "🔥 Tous les produits", buy: "ACHETER 🛒", sold: "vendus", secure: "🔒 100% Sécurisé • Vérifié" },
-        es: { all: "🔥 Todos los productos", buy: "COMPRAR AHORA 🛒", sold: "vendidos", secure: "🔒 100% Seguro • Verificado" }
-    };
-
-    // Từ điển tự động chuyển đổi nghĩa thông dụng cho từ do anh gõ ở Admin (Ví dụ: Pin -> Baterias / Batteries)
-    const keywordMap = {
-        "pin": { pt: "Baterias", en: "Batteries", fr: "Piles", es: "Baterías", vi: "Pin" },
-        "sạc": { pt: "Carregadores", en: "Chargers", fr: "Chargeurs", es: "Cargadores", vi: "Sạc" },
-        "dien thoai": { pt: "Celulares", en: "Phones", fr: "Téléphones", es: "Teléfonos", vi: "Điện thoại" },
-        "dong ho": { pt: "Relógios", en: "Watches", fr: "Montres", es: "Relojes", vi: "Đồng hồ" },
-        "phu kien": { pt: "Acessórios", en: "Accessories", fr: "Accessoires", es: "Accesorios", vi: "Phụ kiện" },
-        "tai nghe": { pt: "Fones de Ouvido", en: "Earphones", fr: "Écouteurs", es: "Auriculares", vi: "Tai nghe" }
-    };
-
-    function translateCategoryName(name) {
-        let cleanName = name.toLowerCase().trim();
-        for (let key in keywordMap) {
-            if (cleanName.includes(key)) {
-                return keywordMap[key][currentLang] || name;
-            }
-        }
-        return name; // Nếu là từ lạ chưa có trong từ điển, giữ nguyên không bị lỗi
-    }
 
     const fakeNames = ["Maria", "João", "Ana", "Carlos", "Lucas", "Julia", "Pedro", "Camila", "Elena", "Mateus", "Gabriel", "Linh", "David", "Kevin", "Sofia"];
     const fakeFlags = ["🇧🇷", "🇺🇸", "🇫🇷", "🇪🇸", "🇵🇹", "🇨🇴", "🇦🇷", "🇲🇽", "🇨🇱", "🇬🇧", "🇮🇹", "🇻🇳"];
 
-    function initLanguage() {
-        let savedLang = localStorage.getItem('user_lang') || 'pt';
-        currentLang = savedLang;
-        document.getElementById('langSelect').value = savedLang;
+    function changeLanguage(langCode) {
+        localStorage.setItem('user_lang', langCode);
     }
 
-    function changeLanguage() {
-        currentLang = document.getElementById('langSelect').value;
-        localStorage.setItem('user_lang', currentLang);
-        renderCategoriesDropdown();
-        renderGrid();
+    function initLanguage() {
+        let savedLang = localStorage.getItem('user_lang') || 'pt';
+        document.getElementById('langSelect').value = savedLang;
     }
 
     function createSnowflakes() {
@@ -253,7 +219,6 @@
                 document.getElementById('ownerAvatarImg').src = globalData.profile.avatar;
             }
         }
-        document.getElementById('txtSecure').innerText = smartTranslations[currentLang]?.secure || "🔒 100% Seguro • Verificado";
 
         let sHtml = '';
         if(globalData.socials) {
@@ -267,13 +232,11 @@
 
     function renderCategoriesDropdown() {
         const dropdown = document.getElementById('categoryDropdown');
-        let allText = smartTranslations[currentLang]?.all || "🔥 All Products";
-        let html = `<option value="all">${allText}</option>`;
+        let html = `<option value="all">🔥 Todos os produtos / All Products</option>`;
         
         if (globalData.categories && globalData.categories.length > 0) {
             globalData.categories.forEach(cat => {
-                let translatedName = translateCategoryName(cat.name);
-                html += `<option value="${cat.id}">${translatedName}</option>`;
+                html += `<option value="${cat.id}">${cat.name}</option>`;
             });
         }
         dropdown.innerHTML = html;
@@ -294,11 +257,10 @@
         }
 
         if (products.length === 0) {
-            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: #a4b0be; font-size: 13px;">Nenhum produto encontrado.</div>`;
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: #a4b0be; font-size: 13px;">Nenhum produto encontrado nesta categoria.</div>`;
             return;
         }
 
-        let buyText = smartTranslations[currentLang]?.buy || "COMPRAR 🛒";
         let html = '';
         products.forEach(p => {
             let isPinned = p.pinned ? 'pinned' : '';
@@ -327,7 +289,7 @@
                             <button class="copy-link-btn" onclick="copyAffLink('${p.link}')" title="Copiar Link"><i class="fas fa-copy"></i></button>
                         </div>
                         ${shippingHtml}
-                        <a href="${p.link}" target="_blank" class="buy-btn">${buyText}</a>
+                        <a href="${p.link}" target="_blank" class="buy-btn">COMPRAR 🛒</a>
                     </div>
                 </div>
             `;
