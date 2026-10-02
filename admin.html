@@ -31,7 +31,7 @@
 <div class="admin-box">
     <h1>🛠️ BẢNG QUẢN TRỊ MASTER BIO</h1>
     
-    <!-- PHẦN 1: THÔNG TIN BIO & GIAO DIỆN CHÍNH -->
+    <!-- PHẦN 1: THÔNG TIN BIO & CHÂN TRANG -->
     <div class="section-box">
         <h3>👤 Chỉnh sửa Thông tin Bio & Chân trang</h3>
         <div class="form-group">
@@ -151,7 +151,6 @@
         }
     }
 
-    // Tự động tính % giảm giá từ giá hiện tại và giá gốc
     function autoCalculateBadge() {
         let mainStr = document.getElementById('pMainPrice').value;
         let subStr = document.getElementById('pSubPrice').value;
@@ -198,7 +197,7 @@
             yt: document.getElementById('socYt').value,
             wa: document.getElementById('socWa').value
         };
-        await saveToCloud("Đã lưu liên kết mạng xã hội thành công!");
+        await saveToCloud("Đã lưu mạng xã hội thành công!");
     }
 
     async function addNewProduct() {
