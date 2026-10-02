@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - Cloud Sync</title>
+    <title>Painel de Controle - Achadinhos</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .admin-box { width: 100%; max-width: 600px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .admin-box { width: 100%; max-width: 650px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px; color: #555; }
@@ -15,17 +15,22 @@
         .btn { background: #ff4757; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 15px; margin-top: 10px; }
         .btn:hover { background: #ff3838; }
         .loading { text-align: center; color: #005bed; font-weight: bold; margin-top: 10px; display: none; }
+        
+        /* Danh sách sản phẩm trong admin để xóa */
+        .admin-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 15px; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #f9f9f9; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; }
+        .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-del:hover { background: #c62828; }
     </style>
 </head>
 <body>
 
 <div class="admin-box">
-    <h1>☁️ Quản Trị Cloud (Đồng bộ thời gian thực)</h1>
+    <h1>🛠️ Quản Trị Sản Phẩm (Cloud Sync)</h1>
     
     <div class="form-group">
-        <label>JSONBin Bin ID (Mã kho chứa data của bạn):</label>
-        <input type="text" id="binId" placeholder="6abf812cffd5d16053458888" value="">
-        <small style="color:#666; font-size:11px;">Mã định danh kho chứa dữ liệu trên JSONBin.io của bạn.</small>
+        <label>Bin ID hiện tại (Đã cố định):</label>
+        <input type="text" id="binId" value="6abf812cffd5d16053458888" disabled style="background:#e9ecef; color:#666;">
     </div>
 
     <hr style="margin: 20px 0; border:0; border-top:1px solid #eee;">
@@ -60,36 +65,66 @@
     </div>
 
     <div class="form-group">
-        <label>Giá gốc / Giảm giá (Sub Price & Badge):</label>
+        <label>Giá gốc & Nhãn giảm giá:</label>
         <input type="text" id="pSubPrice" placeholder="R$ 120,00" style="margin-bottom:5px;">
         <input type="text" id="pBadge" placeholder="Nhãn (VD: 70% OFF)">
     </div>
 
-    <button class="btn" onclick="uploadToCloud()">🚀 Lưu & Đồng Bộ Lên Mây</button>
-    <div id="loadingText" class="loading">Đang đẩy dữ liệu lên mây, vui lòng đợi...</div>
+    <button class="btn" onclick="addNewProduct()">➕ Thêm Sản Phẩm Mới Lên Mây</button>
+    <div id="loadingText" class="loading">Đang đồng bộ dữ liệu, vui lòng đợi...</div>
+
+    <div class="admin-list">
+        <h3>📋 Danh sách sản phẩm trên mây (Bấm xóa để gỡ bỏ):</h3>
+        <div id="currentProductsList" style="margin-top: 10px;">Đang tải danh sách...</div>
+    </div>
 </div>
 
 <script>
-    // 1. MẬT KHẨU QUẢN TRỊ (Bạn có thể sửa lại chuỗi này thành mật khẩu tùy ý)
-    const ADMIN_PASS = "123456"; 
+    const ADMIN_PASS = "123456"; // Mật khẩu quản trị của bạn
+    const BIN_ID = "6abf812cffd5d16053458888";
+    const MASTER_KEY = "$2a$10$NHUA_MASTER_KEY_CUA_BAN_O_DAY"; // (Hãy thay bằng Master Key thật của bạn từ JSONBin)
 
     let enteredPass = prompt("Nhập mật khẩu quản trị (Mặc định: 123456):");
     if (enteredPass !== ADMIN_PASS) {
-        alert("Sai mật khẩu! Bạn không có quyền truy cập.");
+        alert("Sai mật khẩu!");
         document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px; color:red;'>Truy cập bị từ chối ❌</h2>";
         throw new Error("Unauthorized");
     }
 
-    // 2. 🔑 HÃY THAY MÃ MASTER KEY CỦA BẠN VÀO ĐÂY
-    const MASTER_KEY = "$2a$10$ka6PM2vVBDDaDoirSLIys.sa0GccPv63vO5SIH936dSZh3tu4O.Sq"; 
+    let cloudProducts = [];
 
-    async function uploadToCloud() {
-        const binId = document.getElementById('binId').value.trim();
-        if(!binId) {
-            alert("Vui lòng nhập Bin ID của bạn trên JSONBin!");
+    // Tải danh sách sản phẩm hiện có từ mây khi vừa mở trang
+    async function loadAdminData() {
+        try {
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                headers: { 'X-Master-Key': MASTER_KEY }
+            });
+            let data = await res.json();
+            cloudProducts = data.record.products || [];
+            renderAdminList();
+        } catch (err) {
+            document.getElementById('currentProductsList').innerHTML = "Lỗi tải dữ liệu từ mây. Hãy kiểm tra lại Master Key trong code.";
+        }
+    }
+
+    function renderAdminList() {
+        const listDiv = document.getElementById('currentProductsList');
+        listDiv.innerHTML = '';
+        if (cloudProducts.length === 0) {
+            listDiv.innerHTML = "<p style='color:#666;'>Chưa có sản phẩm nào.</p>";
             return;
         }
+        cloudProducts.forEach((p, index) => {
+            listDiv.innerHTML += `
+                <div class="admin-item">
+                    <span><b>[${p.category.toUpperCase()}]</b> ${p.title} (${p.mainPrice})</span>
+                    <button class="btn-del" onclick="deleteProduct(${index})">🗑️ Xóa</button>
+                </div>
+            `;
+        });
+    }
 
+    async function addNewProduct() {
         const newItem = {
             id: Date.now(),
             category: document.getElementById('pCategory').value,
@@ -108,44 +143,50 @@
             return;
         }
 
+        cloudProducts.push(newItem);
+        await saveToCloud("Thêm sản phẩm thành công!");
+        
+        // Reset form
+        document.getElementById('pTitle').value = '';
+        document.getElementById('pImage').value = '';
+        document.getElementById('pLink').value = '';
+        document.getElementById('pMainPrice').value = '';
+        document.getElementById('pSubPrice').value = '';
+        document.getElementById('pBadge').value = '';
+    }
+
+    async function deleteProduct(index) {
+        if(!confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
+        cloudProducts.splice(index, 1);
+        await saveToCloud("Đã xóa sản phẩm thành công!");
+    }
+
+    async function saveToCloud(successMsg) {
         document.getElementById('loadingText').style.display = 'block';
-
         try {
-            let response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                headers: { 'X-Master-Key': MASTER_KEY }
-            });
-            let data = await response.json();
-            let currentProducts = data.record.products || [];
-
-            currentProducts.push(newItem);
-
-            let updateRes = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+            let updateRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Master-Key': MASTER_KEY
                 },
-                body: JSON.stringify({ products: currentProducts })
+                body: JSON.stringify({ products: cloudProducts })
             });
 
             if(updateRes.ok) {
-                alert("Đồng bộ thành công! Sản phẩm đã xuất hiện trên trang khách xem.");
-                document.getElementById('pTitle').value = '';
-                document.getElementById('pImage').value = '';
-                document.getElementById('pLink').value = '';
-                document.getElementById('pMainPrice').value = '';
-                document.getElementById('pSubPrice').value = '';
-                document.getElementById('pBadge').value = '';
+                alert(successMsg);
+                renderAdminList();
             } else {
-                alert("Lỗi khi lưu dữ liệu lên mây. Kiểm tra lại Master Key hoặc Bin ID!");
+                alert("Lỗi lưu dữ liệu. Hãy kiểm tra lại Master Key!");
             }
         } catch (err) {
-            console.error(err);
-            alert("Có lỗi kết nối mạng xảy ra.");
+            alert("Lỗi kết nối mạng.");
         } finally {
             document.getElementById('loadingText').style.display = 'none';
         }
     }
+
+    loadAdminData();
 </script>
 </body>
 </html>
